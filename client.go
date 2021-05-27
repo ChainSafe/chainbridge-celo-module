@@ -37,8 +37,8 @@ const TxRetryLimit = 10
 const DefaultGasLimit = 6721975
 const DefaultGasPrice = 20000000000
 
-func NewEVMClient(endpoint string, http bool, sender *secp256k1.Keypair) (*EVMClient, error) {
-	c := &EVMClient{
+func NewCeloClient(endpoint string, http bool, sender *secp256k1.Keypair) (*CeloClient, error) {
+	c := &CeloClient{
 		endpoint: endpoint,
 		http:     http,
 		sender:   sender,
@@ -49,7 +49,7 @@ func NewEVMClient(endpoint string, http bool, sender *secp256k1.Keypair) (*EVMCl
 	return c, nil
 }
 
-type EVMClient struct {
+type CeloClient struct {
 	*ethclient.Client
 	endpoint      string
 	http          bool
@@ -64,7 +64,7 @@ type EVMClient struct {
 }
 
 // Connect starts the ethereum WS connection
-func (c *EVMClient) connect() error {
+func (c *CeloClient) connect() error {
 	log.Info().Str("url", c.endpoint).Msg("Connecting to ethereum chain...")
 	var rpcClient *rpc.Client
 	var err error
@@ -88,7 +88,7 @@ func (c *EVMClient) connect() error {
 }
 
 // LatestBlock returns the latest block from the current chain
-func (c *EVMClient) LatestBlock() (*big.Int, error) {
+func (c *CeloClient) LatestBlock() (*big.Int, error) {
 	header, err := c.Client.HeaderByNumber(context.Background(), nil)
 	if err != nil {
 		return nil, err
@@ -96,11 +96,11 @@ func (c *EVMClient) LatestBlock() (*big.Int, error) {
 	return header.Number, nil
 }
 
-func (c *EVMClient) GetEthClient() *ethclient.Client {
+func (c *CeloClient) GetEthClient() *ethclient.Client {
 	return c.Client
 }
 
-func (c *EVMClient) ExecuteProposal(bridgeAddress string, proposal *evm.Proposal) error {
+func (c *CeloClient) ExecuteProposal(bridgeAddress string, proposal *evm.Proposal) error {
 	for i := 0; i < TxRetryLimit; i++ {
 		err := c.lockAndUpdateOpts()
 		if err != nil {
@@ -153,7 +153,7 @@ func (c *EVMClient) ExecuteProposal(bridgeAddress string, proposal *evm.Proposal
 	return ErrFatalTx
 }
 
-func (c *EVMClient) VoteProposal(bridgeAddress string, proposal *evm.Proposal) error {
+func (c *CeloClient) VoteProposal(bridgeAddress string, proposal *evm.Proposal) error {
 	for i := 0; i < TxRetryLimit; i++ {
 		err := c.lockAndUpdateOpts()
 		if err != nil {
@@ -198,7 +198,7 @@ func (c *EVMClient) VoteProposal(bridgeAddress string, proposal *evm.Proposal) e
 	return ErrFatalTx
 }
 
-func (c *EVMClient) ProposalStatus(bridgeAddress string, p *evm.Proposal) (relayer.ProposalStatus, error) {
+func (c *CeloClient) ProposalStatus(bridgeAddress string, p *evm.Proposal) (relayer.ProposalStatus, error) {
 	b, err := Bridge.NewBridge(common.HexToAddress(bridgeAddress), c)
 	if err != nil {
 		return 99, err
@@ -212,7 +212,7 @@ func (c *EVMClient) ProposalStatus(bridgeAddress string, p *evm.Proposal) (relay
 	return relayer.ProposalStatus(prop.Status), nil
 }
 
-func (c *EVMClient) VotedBy(bridgeAddress string, p *evm.Proposal) bool {
+func (c *CeloClient) VotedBy(bridgeAddress string, p *evm.Proposal) bool {
 	b, err := Bridge.NewBridge(common.HexToAddress(bridgeAddress), c)
 	if err != nil {
 		return false
@@ -224,7 +224,7 @@ func (c *EVMClient) VotedBy(bridgeAddress string, p *evm.Proposal) bool {
 	return hv
 }
 
-func (c *EVMClient) MatchResourceIDToHandlerAddress(bridgeAddress string, rID [32]byte) (string, error) {
+func (c *CeloClient) MatchResourceIDToHandlerAddress(bridgeAddress string, rID [32]byte) (string, error) {
 	b, err := Bridge.NewBridge(common.HexToAddress(bridgeAddress), c)
 	if err != nil {
 		return "", err
@@ -237,7 +237,7 @@ func (c *EVMClient) MatchResourceIDToHandlerAddress(bridgeAddress string, rID [3
 }
 
 // newTransactOpts builds the TransactOpts for the connection's keypair.
-func (c *EVMClient) newTransactOpts(value, gasLimit, gasPrice *big.Int) (*bind.TransactOpts, error) {
+func (c *CeloClient) newTransactOpts(value, gasLimit, gasPrice *big.Int) (*bind.TransactOpts, error) {
 	privateKey := c.sender.PrivateKey()
 	address := crypto.PubkeyToAddress(privateKey.PublicKey)
 
@@ -258,11 +258,11 @@ func (c *EVMClient) newTransactOpts(value, gasLimit, gasPrice *big.Int) (*bind.T
 	return auth, nil
 }
 
-func (c *EVMClient) unlockOpts() {
+func (c *CeloClient) unlockOpts() {
 	c.optsLock.Unlock()
 }
 
-func (c *EVMClient) lockAndUpdateOpts() error {
+func (c *CeloClient) lockAndUpdateOpts() error {
 	c.optsLock.Lock()
 
 	gasPrice, err := c.safeEstimateGas(context.TODO())
@@ -280,11 +280,11 @@ func (c *EVMClient) lockAndUpdateOpts() error {
 	return nil
 }
 
-func (c *EVMClient) getOpts() *bind.TransactOpts {
+func (c *CeloClient) getOpts() *bind.TransactOpts {
 	return c.opts
 }
 
-func (c *EVMClient) safeEstimateGas(ctx context.Context) (*big.Int, error) {
+func (c *CeloClient) safeEstimateGas(ctx context.Context) (*big.Int, error) {
 	suggestedGasPrice, err := c.SuggestGasPrice(context.TODO())
 	if err != nil {
 		return nil, err
