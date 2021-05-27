@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="dae7ecd9-79cd-4345-a967-bc0402befa73" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/bindings/default/AccessControl/AccessControl.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/Bridge/Bridge.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/CentrifugeAsset/CentrifugeAsset.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/Context/Context.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC165/ERC165.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20/ERC20.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20Burnable/ERC20Burnable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20Handler/ERC20Handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20Pausable/ERC20Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20PresetMinterPauser/ERC20PresetMinterPauser.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC20Safe/ERC20Safe.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721/ERC721.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721Burnable/ERC721Burnable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721Handler/ERC721Handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721MinterBurnerPauser/ERC721MinterBurnerPauser.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721Pausable/ERC721Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ERC721Safe/ERC721Safe.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/GenericHandler/GenericHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/HandlerHelpers/HandlerHelpers.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IBridge/IBridge.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IDepositExecute/IDepositExecute.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC165/IERC165.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC20/IERC20.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC721/IERC721.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC721Enumerable/IERC721Enumerable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC721Metadata/IERC721Metadata.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERC721Receiver/IERC721Receiver.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IERCHandler/IERCHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/IGenericHandler/IGenericHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/Migrations/Migrations.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/NoArgument/NoArgument.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/OneArgument/OneArgument.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/Pausable/Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/ThreeArguments/ThreeArguments.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/default/TwoArguments/TwoArguments.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/AccessControl/AccessControl.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/Bridge/Bridge.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/CentrifugeAsset/CentrifugeAsset.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC165/ERC165.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20/ERC20.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20Burnable/ERC20Burnable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20Handler/ERC20Handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20Pausable/ERC20Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20PresetMinterPauser/ERC20PresetMinterPauser.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC20Safe/ERC20Safe.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721/ERC721.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721Burnable/ERC721Burnable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721Handler/ERC721Handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721MinterBurnerPauser/ERC721MinterBurnerPauser.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721Pausable/ERC721Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ERC721Safe/ERC721Safe.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/GenericHandler/GenericHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/HandlerHelpers/HandlerHelpers.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IDepositExecute/IDepositExecute.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC165/IERC165.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC20/IERC20.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC721/IERC721.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC721Enumerable/IERC721Enumerable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC721Metadata/IERC721Metadata.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERC721Receiver/IERC721Receiver.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IERCHandler/IERCHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/IGenericHandler/IGenericHandler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/MPTVerifier/MPTVerifier.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/NoArgument/NoArgument.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/OneArgument/OneArgument.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/Pausable/Pausable.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/RLPReaderHelper/RLPReaderHelper.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/ThreeArguments/ThreeArguments.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bindings/mptp/TwoArguments/TwoArguments.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/scripts/build_contracts.sh" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/build_contracts.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="31" column="40" lean-forward="true" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="205">
+              <caret line="253" column="22" lean-forward="true" selection-start-line="253" selection-start-column="22" selection-end-line="253" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/scripts/setup_contracts.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="58" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>chainbridgev2</find>
+      <find>github.com/ethereum/go-ethereum</find>
+      <find>70c97947f6b05397c2887fe8213a3d49d3d06de7</find>
+      <find>Compiling</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>chainbridge-core</replace>
+    </replaceStrings>
+  </component>
+  <component name="GOROOT" path="/usr/local/Cellar/go/1.16/libexec" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/go.mod" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/handlers.go" />
+        <option value="$PROJECT_DIR$/client.go" />
+        <option value="$PROJECT_DIR$/message.go" />
+        <option value="$PROJECT_DIR$/Makefile" />
+        <option value="$PROJECT_DIR$/scripts/setup_contracts.sh" />
+        <option value="$PROJECT_DIR$/scripts/build_contracts.sh" />
+      </list>
+    </option>
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="uucWXWKN" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="y" value="25" />
+    <option name="width" value="1792" />
+    <option name="height" value="1095" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chainbridge-celo-module" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chainbridge-celo-module" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="go.vgo" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/bindings" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="25" width="1792" height="1095" extended-state="6" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.119428575" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="GraphQL" order="9" />
+      <window_info anchor="bottom" id="Database Changes" order="10" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.34302908" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Cargo" order="3" />
+      <window_info anchor="right" id="make" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/bindings/ERC20PresetMinterPauser/ERC20PresetMinterPauser.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="7" lean-forward="true" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+          <folding>
+            <element signature="e#140#448#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bindings/ERC20/ERC20.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="40" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.sum">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="41" selection-start-line="9" selection-start-column="41" selection-end-line="9" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.mod">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="28" selection-start-column="28" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/txtrie/txtrie.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/Cellar/go/pkg/mod/github.com/!chain!safe/chainbridge-core@v0.0.0-20210521100444-4112d971d977/chains/evm/chain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="57" column="1" lean-forward="true" selection-start-line="57" selection-start-column="1" selection-end-line="57" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handlers.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/message.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="29" column="67" selection-start-line="29" selection-start-column="67" selection-end-line="29" selection-end-column="67" />
+          <folding>
+            <element signature="e#16#177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/solidity/scripts/compileAbiBin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="24" column="4" lean-forward="true" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/build_contracts.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="31" column="40" lean-forward="true" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="253" column="22" lean-forward="true" selection-start-line="253" selection-start-column="22" selection-end-line="253" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Makefile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/setup_contracts.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="58" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
