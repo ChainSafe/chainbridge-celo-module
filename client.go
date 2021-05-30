@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ChainSafe/chainbridge-celo-module/bindings/default/Bridge"
+	"github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/Bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm"
 	"github.com/ChainSafe/chainbridge-core/crypto/secp256k1"
 	"github.com/ChainSafe/chainbridge-core/relayer"
@@ -118,6 +118,12 @@ func (c *CeloClient) ExecuteProposal(bridgeAddress string, proposal *evm.Proposa
 			uint64(proposal.DepositNonce),
 			proposal.Data,
 			proposal.ResourceId,
+			nil,
+			nil,
+			[32]byte{},
+			[32]byte{},
+			nil,
+			nil,
 			//proposal.SVParams.Signature,
 			//proposal.SVParams.AggregatePublicKey,
 			//proposal.SVParams.BlockHash,
@@ -217,7 +223,8 @@ func (c *CeloClient) VotedBy(bridgeAddress string, p *evm.Proposal) bool {
 	if err != nil {
 		return false
 	}
-	hv, err := b.HasVotedOnProposal(&bind.CallOpts{}, evm.GetIDAndNonce(p), p.DataHash, c.sender.CommonAddress())
+	addr := common.Address(c.sender.CommonAddress())
+	hv, err := b.HasVotedOnProposal(&bind.CallOpts{}, evm.GetIDAndNonce(p), p.DataHash, addr)
 	if err != nil {
 		return false
 	}

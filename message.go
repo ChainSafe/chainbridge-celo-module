@@ -1,9 +1,6 @@
 package client
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/ChainSafe/chainbridge-core/relayer"
 	"github.com/celo-org/celo-blockchain/common"
 	"github.com/celo-org/celo-blockchain/crypto"
@@ -24,7 +21,7 @@ type SignatureVerification struct {
 type CeloMessage struct {
 	Source       uint8  // Source where message was initiated
 	Destination  uint8  // Destination chain of message
-	Type         string // type of bridge transfer
+	Type         relayer.TransferType // type of bridge transfer
 	DepositNonce uint64 // Nonce for the deposit
 	ResourceId   [32]byte
 	Payload      []interface{} // data associated with event sequence
@@ -53,25 +50,25 @@ func (m *CeloMessage) GetPayload() []interface{} {
 func (m *CeloMessage) CreateProposalDataHash(data []byte) common.Hash {
 	return crypto.Keccak256Hash(data)
 }
-
-func (m *CeloMessage) CreateProposalData() ([]byte, error) {
-	var data []byte
-	var err error
-	switch m.Type {
-	case relayer.FungibleTransfer:
-		data, err = m.createERC20ProposalData()
-	case relayer.NonFungibleTransfer:
-		data, err = m.createErc721ProposalData()
-	case relayer.GenericTransfer:
-		data, err = m.createGenericDepositProposalData()
-	default:
-		return nil, errors.New(fmt.Sprintf("unknown message type received %s", m.Type))
-	}
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
-}
+//
+//func (m *CeloMessage) CreateProposalData() ([]byte, error) {
+//	var data []byte
+//	var err error
+//	switch m.Type {
+//	case relayer.FungibleTransfer:
+//		data, err = m.createERC20ProposalData()
+//	case relayer.NonFungibleTransfer:
+//		data, err = m.createErc721ProposalData()
+//	case relayer.GenericTransfer:
+//		data, err = m.createGenericDepositProposalData()
+//	default:
+//		return nil, errors.New(fmt.Sprintf("unknown message type received %s", m.Type))
+//	}
+//	if err != nil {
+//		return nil, err
+//	}
+//	return data, nil
+//}
 
 func sliceTo32Bytes(in []byte) [32]byte {
 	var res [32]byte
