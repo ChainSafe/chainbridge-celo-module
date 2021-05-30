@@ -12,11 +12,11 @@ import (
 	"github.com/celo-org/celo-blockchain/ethdb"
 	"github.com/celo-org/celo-blockchain/ethdb/memorydb"
 	"github.com/celo-org/celo-blockchain/rlp"
-	ethtrie "github.com/ethereum/go-ethereum/trie"
+	ethtrie "github.com/celo-org/celo-blockchain/trie"
 )
 
 var (
-	// from https://github.com/ethereum/go-ethereum/blob/bcb308745010675671991522ad2a9e811938d7fb/trie/trie.go#L32
+	// from https://github.com/celo-org/celo-blockchain/blob/bcb308745010675671991522ad2a9e811938d7fb/trie/trie.go#L32
 	emptyRoot = common.HexToHash("56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421")
 )
 

@@ -9,7 +9,7 @@ import (
 	big "math/big"
 	reflect "reflect"
 
-	types "github.com/ethereum/go-ethereum/core/types"
+	types "github.com/celo-org/celo-blockchain/core/types"
 	gomock "github.com/golang/mock/gomock"
 )
 
