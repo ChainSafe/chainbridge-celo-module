@@ -13,8 +13,10 @@ import (
 
 	"github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/Bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm"
+	coreListener "github.com/ChainSafe/chainbridge-core/chains/evm/listener"
 	"github.com/ChainSafe/chainbridge-core/crypto/secp256k1"
 	"github.com/ChainSafe/chainbridge-core/relayer"
+	ethereum "github.com/celo-org/celo-blockchain"
 	"github.com/celo-org/celo-blockchain/accounts/abi/bind"
 	"github.com/celo-org/celo-blockchain/common"
 	"github.com/celo-org/celo-blockchain/crypto"
@@ -22,7 +24,6 @@ import (
 	"github.com/celo-org/celo-blockchain/rpc"
 	"github.com/rs/zerolog/log"
 )
-
 
 var ErrFatalTx = errors.New("submission of transaction failed")
 var ErrNonceTooLow = errors.New("nonce too low")
@@ -313,4 +314,35 @@ func multiplyGasPrice(gasEstimate *big.Int, gasMultiplier *big.Float) *big.Int {
 	gasPrice := new(big.Int)
 	result.Int(gasPrice)
 	return gasPrice
+}
+
+func (c *CeloClient) FetchDepositLogs(ctx context.Context, contractAddress string, sig string, startBlock *big.Int, endBlock *big.Int) ([]*coreListener.DepositLogs, error) {
+	logs, err := c.FilterLogs(ctx, buildQuery(common.HexToAddress(contractAddress), sig, startBlock, endBlock))
+	if err != nil {
+		return nil, err
+	}
+	depositLogs := make([]*coreListener.DepositLogs, 0)
+
+	for _, l := range logs {
+		dl := &coreListener.DepositLogs{
+			DestinationID: uint8(l.Topics[1].Big().Uint64()),
+			ResourceID:    l.Topics[2],
+			DepositNonce:  l.Topics[3].Big().Uint64(),
+		}
+		depositLogs = append(depositLogs, dl)
+	}
+	return depositLogs, nil
+}
+
+// buildQuery constructs a query for the bridgeContract by hashing sig to get the event topic
+func buildQuery(contract common.Address, sig string, startBlock *big.Int, endBlock *big.Int) ethereum.FilterQuery {
+	query := ethereum.FilterQuery{
+		FromBlock: startBlock,
+		ToBlock:   endBlock,
+		Addresses: []common.Address{contract},
+		Topics: [][]common.Hash{
+			{crypto.Keccak256Hash([]byte(sig))},
+		},
+	}
+	return query
 }
