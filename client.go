@@ -5,6 +5,7 @@ package client
 
 import (
 	"context"
+	"crypto/ecdsa"
 	"errors"
 	"fmt"
 	"math/big"
@@ -14,7 +15,6 @@ import (
 	"github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/Bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm"
 	coreListener "github.com/ChainSafe/chainbridge-core/chains/evm/listener"
-	"github.com/ChainSafe/chainbridge-core/crypto/secp256k1"
 	"github.com/ChainSafe/chainbridge-core/relayer"
 	ethereum "github.com/celo-org/celo-blockchain"
 	"github.com/celo-org/celo-blockchain/accounts/abi/bind"
@@ -38,7 +38,12 @@ const TxRetryLimit = 10
 const DefaultGasLimit = 6721975
 const DefaultGasPrice = 20000000000
 
-func NewCeloClient(endpoint string, http bool, sender *secp256k1.Keypair) (*CeloClient, error) {
+type Sender interface {
+	PrivateKey() *ecdsa.PrivateKey
+	Address() string
+}
+
+func NewCeloClient(endpoint string, http bool, sender Sender) (*CeloClient, error) {
 	c := &CeloClient{
 		endpoint: endpoint,
 		http:     http,
@@ -58,7 +63,7 @@ type CeloClient struct {
 	errChn        chan<- error
 	optsLock      sync.Mutex
 	opts          *bind.TransactOpts
-	sender        *secp256k1.Keypair
+	sender        Sender
 	maxGasPrice   *big.Int   // TODO
 	gasMultiplier *big.Float // TODO
 	gasLimit      *big.Int
@@ -224,7 +229,7 @@ func (c *CeloClient) VotedBy(bridgeAddress string, p *evm.Proposal) bool {
 	if err != nil {
 		return false
 	}
-	addr := common.Address(c.sender.CommonAddress())
+	addr := common.HexToAddress(c.sender.Address())
 	hv, err := b.HasVotedOnProposal(&bind.CallOpts{}, evm.GetIDAndNonce(p), p.DataHash, addr)
 	if err != nil {
 		return false
