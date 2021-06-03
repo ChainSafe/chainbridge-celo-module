@@ -251,15 +251,11 @@ func (c *CeloClient) MatchResourceIDToHandlerAddress(bridgeAddress string, rID [
 
 // newTransactOpts builds the TransactOpts for the connection's keypair.
 func (c *CeloClient) newTransactOpts(value, gasLimit, gasPrice *big.Int) (*bind.TransactOpts, error) {
-	privateKey := c.sender.PrivateKey()
-	address := crypto.PubkeyToAddress(privateKey.PublicKey)
-
-	nonce, err := c.PendingNonceAt(context.Background(), address)
+	nonce, err := c.PendingNonceAt(context.Background(), common.HexToAddress(c.sender.Address()))
 	if err != nil {
 		return nil, err
 	}
-
-	auth := bind.NewKeyedTransactor(privateKey)
+	auth := bind.NewKeyedTransactor(c.sender.PrivateKey())
 	if err != nil {
 		return nil, err
 	}
