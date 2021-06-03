@@ -5,7 +5,7 @@ go 1.16
 replace github.com/celo-org/celo-bls-go => github.com/celo-org/celo-bls-go v0.1.7
 
 require (
-	github.com/ChainSafe/chainbridge-core v0.0.0-00010101000000-000000000000
+	github.com/ChainSafe/chainbridge-core v0.0.0-20210602125535-8f78a5e6de69
 	github.com/celo-org/celo-blockchain v1.3.2
 	github.com/celo-org/celo-bls-go v0.2.4
 	github.com/go-kit/kit v0.9.0 // indirect
