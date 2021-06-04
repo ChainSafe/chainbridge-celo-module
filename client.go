@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/Bridge"
+	"github.com/ChainSafe/chainbridge-core/chains"
 	"github.com/ChainSafe/chainbridge-core/chains/evm"
 	coreListener "github.com/ChainSafe/chainbridge-core/chains/evm/listener"
 	"github.com/ChainSafe/chainbridge-core/relayer"
@@ -43,11 +44,14 @@ type Sender interface {
 	Address() string
 }
 
-func NewCeloClient(endpoint string, http bool, sender Sender) (*CeloClient, error) {
+func NewCeloClient(config *chains.RawChainConfig, sender Sender) (*CeloClient, error) {
+	cfg, err := evm.ParseConfig(config)
+	if err != nil {
+		return nil, err
+	}
 	c := &CeloClient{
-		endpoint: endpoint,
-		http:     http,
-		sender:   sender,
+		config: cfg,
+		sender: sender,
 	}
 	if err := c.connect(); err != nil {
 		return nil, err
@@ -57,35 +61,32 @@ func NewCeloClient(endpoint string, http bool, sender Sender) (*CeloClient, erro
 
 type CeloClient struct {
 	*ethclient.Client
-	endpoint      string
-	http          bool
-	stop          <-chan struct{}
-	errChn        chan<- error
-	optsLock      sync.Mutex
-	opts          *bind.TransactOpts
-	sender        Sender
-	maxGasPrice   *big.Int   // TODO
-	gasMultiplier *big.Float // TODO
-	gasLimit      *big.Int
+	stop     <-chan struct{}
+	errChn   chan<- error
+	optsLock sync.Mutex
+	opts     *bind.TransactOpts
+	sender   Sender
+	config   *evm.EVMConfig
 }
 
 // Connect starts the ethereum WS connection
 func (c *CeloClient) connect() error {
-	log.Info().Str("url", c.endpoint).Msg("Connecting to ethereum chain...")
+	var generalChainConfig = c.config.GeneralChainConfig
+	log.Info().Str("url", generalChainConfig.Endpoint).Msg("Connecting to ethereum chain...")
 	var rpcClient *rpc.Client
 	var err error
 	// Start http or ws client
-	if c.http {
-		rpcClient, err = rpc.DialHTTP(c.endpoint)
+	if c.config.Http {
+		rpcClient, err = rpc.DialHTTP(generalChainConfig.Endpoint)
 	} else {
-		rpcClient, err = rpc.DialWebsocket(context.Background(), c.endpoint, "/ws")
+		rpcClient, err = rpc.DialWebsocket(context.Background(), generalChainConfig.Endpoint, "/ws")
 	}
 	if err != nil {
 		return err
 	}
 	c.Client = ethclient.NewClient(rpcClient)
 	// TODO: move to config
-	opts, err := c.newTransactOpts(big.NewInt(0), big.NewInt(DefaultGasLimit), big.NewInt(DefaultGasPrice))
+	opts, err := c.newTransactOpts(big.NewInt(0), c.config.GasLimit, c.config.MaxGasPrice)
 	if err != nil {
 		return err
 	}
@@ -299,14 +300,14 @@ func (c *CeloClient) safeEstimateGas(ctx context.Context) (*big.Int, error) {
 		return nil, err
 	}
 
-	//gasPrice := multiplyGasPrice(suggestedGasPrice, c.gasMultiplier)
+	gasPrice := multiplyGasPrice(suggestedGasPrice, c.config.GasMultiplier)
 
-	// Check we aren't exceeding our limit
-	//if suggestedGasPrice.Cmp(c.maxGasPrice) == 1 {
-	//	return c.maxGasPrice, nil
-	//} else {
-	return suggestedGasPrice, nil
-	//}
+	//Check we aren't exceeding our limit
+	if gasPrice.Cmp(c.config.MaxGasPrice) == 1 {
+		return c.config.MaxGasPrice, nil
+	} else {
+		return gasPrice, nil
+	}
 }
 
 func multiplyGasPrice(gasEstimate *big.Int, gasMultiplier *big.Float) *big.Int {
