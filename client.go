@@ -12,8 +12,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ChainSafe/chainbridge-celo-module/config"
+
 	"github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/Bridge"
-	"github.com/ChainSafe/chainbridge-core/chains"
 	"github.com/ChainSafe/chainbridge-core/chains/evm"
 	coreListener "github.com/ChainSafe/chainbridge-core/chains/evm/listener"
 	"github.com/ChainSafe/chainbridge-core/relayer"
@@ -44,13 +45,9 @@ type Sender interface {
 	Address() string
 }
 
-func NewCeloClient(config *chains.RawChainConfig, sender Sender) (*CeloClient, error) {
-	cfg, err := evm.ParseConfig(config)
-	if err != nil {
-		return nil, err
-	}
+func NewCeloClient(config *config.CeloConfig, sender Sender) (*CeloClient, error) {
 	c := &CeloClient{
-		config: cfg,
+		config: config,
 		sender: sender,
 	}
 	if err := c.connect(); err != nil {
@@ -66,7 +63,7 @@ type CeloClient struct {
 	optsLock sync.Mutex
 	opts     *bind.TransactOpts
 	sender   Sender
-	config   *evm.EVMConfig
+	config   *config.CeloConfig
 }
 
 // Connect starts the ethereum WS connection

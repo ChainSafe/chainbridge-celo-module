@@ -14,7 +14,7 @@ require (
 	github.com/golang/mock v1.4.4
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.21.0
+	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
 	github.com/syndtr/goleveldb v1.0.1-0.20200815110645-5c35d600f0ca
-	golang.org/x/net v0.0.0-20210119194325-5f4716e94777 // indirect
 )
