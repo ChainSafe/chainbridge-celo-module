@@ -45,9 +45,15 @@ type Sender interface {
 	Address() string
 }
 
-func NewCeloClient(config *config.CeloConfig, sender Sender) (*CeloClient, error) {
+func NewCeloClient(rawConfig *config.RawCeloConfig, sender Sender) (*CeloClient, error) {
+
+	cfg, err := config.ParseConfig(rawConfig)
+	if err != nil {
+		return nil, err
+	}
+
 	c := &CeloClient{
-		config: config,
+		config: cfg,
 		sender: sender,
 	}
 	if err := c.connect(); err != nil {

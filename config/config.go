@@ -1,8 +1,10 @@
 package config
 
 import (
+	"encoding/json"
 	"fmt"
 	"math/big"
+	"os"
 
 	"github.com/ChainSafe/chainbridge-core/chains"
 	"github.com/spf13/viper"
@@ -25,8 +27,6 @@ type CeloConfig struct {
 	Http               bool
 	StartBlock         *big.Int
 	BlockConfirmations *big.Int
-	// EgsApiKey          string // API key for ethgasstation to query gas prices
-	// EgsSpeed           string // The speed which a transaction should be processed: average, fast, fastest. Default: fast
 }
 
 type RawCeloConfig struct {
@@ -41,11 +41,9 @@ type RawCeloConfig struct {
 	Http                      bool    `mapstructure:"http"`
 	StartBlock                int64   `mapstructure:"startBlock"`
 	BlockConfirmations        int64   `mapstructure:"blockConfirmations"`
-	// EgsApiKey                 string  `mapstructure:"egsApiKey"`
-	// EgsSpeed                  string  `mapstructure:"egsSpeed"`
 }
 
-func GetConfig(path string, name string) (*CeloConfig, error) {
+func GetConfig(path string, name string) (*RawCeloConfig, error) {
 	config := &RawCeloConfig{}
 
 	viper.AddConfigPath(path)
@@ -64,15 +62,10 @@ func GetConfig(path string, name string) (*CeloConfig, error) {
 		return nil, err
 	}
 
-	cfg, err := parseConfig(config)
-	if err != nil {
-		return nil, err
-	}
-
-	return cfg, nil
+	return config, nil
 }
 
-func parseConfig(rawConfig *RawCeloConfig) (*CeloConfig, error) {
+func ParseConfig(rawConfig *RawCeloConfig) (*CeloConfig, error) {
 
 	config := &CeloConfig{
 		GeneralChainConfig: rawConfig.GeneralChainConfig,
@@ -110,4 +103,31 @@ func parseConfig(rawConfig *RawCeloConfig) (*CeloConfig, error) {
 	}
 
 	return config, nil
+}
+
+func (c *RawCeloConfig) ToJSON(file string) *os.File {
+	var (
+		newFile *os.File
+		err     error
+	)
+
+	var raw []byte
+	if raw, err = json.Marshal(&c); err != nil {
+		fmt.Println("error marshalling json", "err", err)
+		os.Exit(1)
+	}
+
+	newFile, err = os.Create(file)
+	if err != nil {
+		fmt.Println("error creating config file", "err", err)
+	}
+	_, err = newFile.Write(raw)
+	if err != nil {
+		fmt.Println("error writing to config file", "err", err)
+	}
+
+	if err := newFile.Close(); err != nil {
+		fmt.Println("failed to unmarshal config into struct", "err", err)
+	}
+	return newFile
 }
