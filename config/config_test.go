@@ -30,17 +30,19 @@ func TestParseChainConfig(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		Erc721Handler:      "0x1234",
-		GenericHandler:     "0x1234",
-		MaxGasPrice:        20,
-		GasMultiplier:      1,
-		GasLimit:           10,
-		Http:               true,
-		StartBlock:         9999,
-		BlockConfirmations: 10,
+		SharedEVMConfig: chains.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			Erc721Handler:      "0x1234",
+			GenericHandler:     "0x1234",
+			MaxGasPrice:        20,
+			GasMultiplier:      1,
+			GasLimit:           10,
+			Http:               true,
+			StartBlock:         9999,
+			BlockConfirmations: 10,
+		},
 	}
 
 	out, err := ParseConfig(&input)
@@ -72,16 +74,18 @@ func TestParseChainConfigWithNoBlockConfirmations(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		Erc721Handler:      "0x1234",
-		GenericHandler:     "0x1234",
-		MaxGasPrice:        20,
-		GasMultiplier:      1,
-		GasLimit:           10,
-		Http:               true,
-		StartBlock:         9999,
+		SharedEVMConfig: chains.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			Erc721Handler:      "0x1234",
+			GenericHandler:     "0x1234",
+			MaxGasPrice:        20,
+			GasMultiplier:      1,
+			GasLimit:           10,
+			Http:               true,
+			StartBlock:         9999,
+		},
 	}
 
 	out, err := ParseConfig(&input)
@@ -115,13 +119,15 @@ func TestChainConfigOneContract(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		MaxGasPrice:        20,
-		GasMultiplier:      1,
-		GasLimit:           10,
-		Http:               true,
+		SharedEVMConfig: chains.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			MaxGasPrice:        20,
+			GasMultiplier:      1,
+			GasLimit:           10,
+			Http:               true,
+		},
 	}
 
 	out, err := ParseConfig(&input)
@@ -158,7 +164,7 @@ func TestRequiredOpts(t *testing.T) {
 	}
 
 	// Empty bridgeContract provided
-	input = RawCeloConfig{Bridge: ""}
+	input = RawCeloConfig{SharedEVMConfig: chains.SharedEVMConfig{Bridge: ""}}
 
 	_, err = ParseConfig(&input)
 
@@ -182,8 +188,10 @@ func createGeneralConfig() chains.GeneralChainConfig {
 func createTempConfigFile() (*os.File, *RawCeloConfig) {
 	generalCfg := createGeneralConfig()
 	ethCfg := RawCeloConfig{
-		GeneralChainConfig: generalCfg,
-		Bridge:             "0x1234",
+		SharedEVMConfig: chains.SharedEVMConfig{
+			GeneralChainConfig: generalCfg,
+			Bridge:             "0x1234",
+		},
 	}
 	tmpFile, err := ioutil.TempFile(".", "*.json")
 	if err != nil {

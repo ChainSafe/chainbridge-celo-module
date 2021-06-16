@@ -30,17 +30,7 @@ type CeloConfig struct {
 }
 
 type RawCeloConfig struct {
-	chains.GeneralChainConfig `mapstructure:",squash"`
-	Bridge                    string  `mapstructure:"bridge"`
-	Erc20Handler              string  `mapstructure:"erc20Handler"`
-	Erc721Handler             string  `mapstructure:"erc721Handler"`
-	GenericHandler            string  `mapstructure:"genericHandler"`
-	MaxGasPrice               int64   `mapstructure:"maxGasPrice"`
-	GasMultiplier             float64 `mapstructure:"gasMultiplier"`
-	GasLimit                  int64   `mapstructure:"gasLimit"`
-	Http                      bool    `mapstructure:"http"`
-	StartBlock                int64   `mapstructure:"startBlock"`
-	BlockConfirmations        int64   `mapstructure:"blockConfirmations"`
+	chains.SharedEVMConfig `mapstructure:",squash"`
 }
 
 func GetConfig(path string, name string) (*RawCeloConfig, error) {
