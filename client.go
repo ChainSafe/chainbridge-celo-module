@@ -45,21 +45,11 @@ type Sender interface {
 	Address() string
 }
 
-func NewCeloClient(rawConfig *config.RawCeloConfig, sender Sender) (*CeloClient, error) {
-
-	cfg, err := config.ParseConfig(rawConfig)
-	if err != nil {
-		return nil, err
-	}
-
+func NewCeloClient(sender Sender) *CeloClient {
 	c := &CeloClient{
-		config: cfg,
 		sender: sender,
 	}
-	if err := c.connect(); err != nil {
-		return nil, err
-	}
-	return c, nil
+	return c
 }
 
 type CeloClient struct {
@@ -70,6 +60,22 @@ type CeloClient struct {
 	opts     *bind.TransactOpts
 	sender   Sender
 	config   *config.CeloConfig
+}
+
+func (c *CeloClient) Configurate(path string, name string) error {
+	rawCfg, err := config.GetConfig(path, name)
+	if err != nil {
+		return err
+	}
+	cfg, err := config.ParseConfig(rawCfg)
+	if err != nil {
+		return err
+	}
+	c.config = cfg
+	if err := c.connect(); err != nil {
+		return err
+	}
+	return nil
 }
 
 // Connect starts the ethereum WS connection
