@@ -74,12 +74,12 @@ type CeloClient struct {
 
 // Connect starts the ethereum WS connection
 func (c *CeloClient) connect() error {
-	var generalChainConfig = c.config.GeneralChainConfig
+	var generalChainConfig = c.config.SharedEVMConfig.GeneralChainConfig
 	log.Info().Str("url", generalChainConfig.Endpoint).Msg("Connecting to ethereum chain...")
 	var rpcClient *rpc.Client
 	var err error
 	// Start http or ws client
-	if c.config.Http {
+	if c.config.SharedEVMConfig.Http {
 		rpcClient, err = rpc.DialHTTP(generalChainConfig.Endpoint)
 	} else {
 		rpcClient, err = rpc.DialWebsocket(context.Background(), generalChainConfig.Endpoint, "/ws")
@@ -89,7 +89,7 @@ func (c *CeloClient) connect() error {
 	}
 	c.Client = ethclient.NewClient(rpcClient)
 	// TODO: move to config
-	opts, err := c.newTransactOpts(big.NewInt(0), c.config.GasLimit, c.config.MaxGasPrice)
+	opts, err := c.newTransactOpts(big.NewInt(0), c.config.SharedEVMConfig.GasLimit, c.config.SharedEVMConfig.MaxGasPrice)
 	if err != nil {
 		return err
 	}
@@ -303,11 +303,11 @@ func (c *CeloClient) safeEstimateGas(ctx context.Context) (*big.Int, error) {
 		return nil, err
 	}
 
-	gasPrice := multiplyGasPrice(suggestedGasPrice, c.config.GasMultiplier)
+	gasPrice := multiplyGasPrice(suggestedGasPrice, c.config.SharedEVMConfig.GasMultiplier)
 
 	//Check we aren't exceeding our limit
-	if gasPrice.Cmp(c.config.MaxGasPrice) == 1 {
-		return c.config.MaxGasPrice, nil
+	if gasPrice.Cmp(c.config.SharedEVMConfig.MaxGasPrice) == 1 {
+		return c.config.SharedEVMConfig.MaxGasPrice, nil
 	} else {
 		return gasPrice, nil
 	}

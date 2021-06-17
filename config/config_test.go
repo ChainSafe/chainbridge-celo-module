@@ -8,7 +8,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ChainSafe/chainbridge-core/chains"
+	"github.com/ChainSafe/chainbridge-core/config"
 )
 
 func TestLoadJSONConfig(t *testing.T) {
@@ -30,7 +30,7 @@ func TestParseChainConfig(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		SharedEVMConfig: chains.SharedEVMConfig{
+		RawSharedEVMConfig: config.RawSharedEVMConfig{
 			GeneralChainConfig: generalConfig,
 			Bridge:             "0x1234",
 			Erc20Handler:       "0x1234",
@@ -51,17 +51,19 @@ func TestParseChainConfig(t *testing.T) {
 	}
 
 	expected := CeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		Erc721Handler:      "0x1234",
-		GenericHandler:     "0x1234",
-		MaxGasPrice:        big.NewInt(20),
-		GasMultiplier:      big.NewFloat(1),
-		GasLimit:           big.NewInt(10),
-		Http:               true,
-		StartBlock:         big.NewInt(9999),
-		BlockConfirmations: big.NewInt(10),
+		SharedEVMConfig: config.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			Erc721Handler:      "0x1234",
+			GenericHandler:     "0x1234",
+			MaxGasPrice:        big.NewInt(20),
+			GasMultiplier:      big.NewFloat(1),
+			GasLimit:           big.NewInt(10),
+			Http:               true,
+			StartBlock:         big.NewInt(9999),
+			BlockConfirmations: big.NewInt(10),
+		},
 	}
 
 	if !reflect.DeepEqual(&expected, out) {
@@ -74,7 +76,7 @@ func TestParseChainConfigWithNoBlockConfirmations(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		SharedEVMConfig: chains.SharedEVMConfig{
+		RawSharedEVMConfig: config.RawSharedEVMConfig{
 			GeneralChainConfig: generalConfig,
 			Bridge:             "0x1234",
 			Erc20Handler:       "0x1234",
@@ -95,17 +97,19 @@ func TestParseChainConfigWithNoBlockConfirmations(t *testing.T) {
 	}
 
 	expected := CeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		Erc721Handler:      "0x1234",
-		GenericHandler:     "0x1234",
-		MaxGasPrice:        big.NewInt(20),
-		GasMultiplier:      big.NewFloat(1),
-		GasLimit:           big.NewInt(10),
-		Http:               true,
-		StartBlock:         big.NewInt(9999),
-		BlockConfirmations: big.NewInt(10),
+		SharedEVMConfig: config.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			Erc721Handler:      "0x1234",
+			GenericHandler:     "0x1234",
+			MaxGasPrice:        big.NewInt(20),
+			GasMultiplier:      big.NewFloat(1),
+			GasLimit:           big.NewInt(10),
+			Http:               true,
+			StartBlock:         big.NewInt(9999),
+			BlockConfirmations: big.NewInt(10),
+		},
 	}
 
 	if !reflect.DeepEqual(&expected, out) {
@@ -119,7 +123,7 @@ func TestChainConfigOneContract(t *testing.T) {
 	generalConfig := createGeneralConfig()
 
 	input := RawCeloConfig{
-		SharedEVMConfig: chains.SharedEVMConfig{
+		RawSharedEVMConfig: config.RawSharedEVMConfig{
 			GeneralChainConfig: generalConfig,
 			Bridge:             "0x1234",
 			Erc20Handler:       "0x1234",
@@ -137,15 +141,17 @@ func TestChainConfigOneContract(t *testing.T) {
 	}
 
 	expected := CeloConfig{
-		GeneralChainConfig: generalConfig,
-		Bridge:             "0x1234",
-		Erc20Handler:       "0x1234",
-		MaxGasPrice:        big.NewInt(20),
-		GasMultiplier:      big.NewFloat(1),
-		GasLimit:           big.NewInt(10),
-		Http:               true,
-		StartBlock:         big.NewInt(0),
-		BlockConfirmations: big.NewInt(10),
+		SharedEVMConfig: config.SharedEVMConfig{
+			GeneralChainConfig: generalConfig,
+			Bridge:             "0x1234",
+			Erc20Handler:       "0x1234",
+			MaxGasPrice:        big.NewInt(20),
+			GasMultiplier:      big.NewFloat(1),
+			GasLimit:           big.NewInt(10),
+			Http:               true,
+			StartBlock:         big.NewInt(0),
+			BlockConfirmations: big.NewInt(10),
+		},
 	}
 
 	if !reflect.DeepEqual(&expected, out) {
@@ -164,7 +170,7 @@ func TestRequiredOpts(t *testing.T) {
 	}
 
 	// Empty bridgeContract provided
-	input = RawCeloConfig{SharedEVMConfig: chains.SharedEVMConfig{Bridge: ""}}
+	input = RawCeloConfig{RawSharedEVMConfig: config.RawSharedEVMConfig{Bridge: ""}}
 
 	_, err = ParseConfig(&input)
 
@@ -174,9 +180,9 @@ func TestRequiredOpts(t *testing.T) {
 
 }
 
-func createGeneralConfig() chains.GeneralChainConfig {
+func createGeneralConfig() config.GeneralChainConfig {
 	var id uint8 = 1
-	return chains.GeneralChainConfig{
+	return config.GeneralChainConfig{
 		Name:     "chain",
 		Type:     "ethereum",
 		Id:       &id,
@@ -188,7 +194,7 @@ func createGeneralConfig() chains.GeneralChainConfig {
 func createTempConfigFile() (*os.File, *RawCeloConfig) {
 	generalCfg := createGeneralConfig()
 	ethCfg := RawCeloConfig{
-		SharedEVMConfig: chains.SharedEVMConfig{
+		config.RawSharedEVMConfig{
 			GeneralChainConfig: generalCfg,
 			Bridge:             "0x1234",
 		},

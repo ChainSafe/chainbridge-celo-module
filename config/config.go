@@ -3,10 +3,9 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"os"
 
-	"github.com/ChainSafe/chainbridge-core/chains"
+	"github.com/ChainSafe/chainbridge-core/config"
 	"github.com/spf13/viper"
 )
 
@@ -16,21 +15,11 @@ const DefaultGasMultiplier = 1
 const DefaultBlockConfirmations = 10
 
 type CeloConfig struct {
-	GeneralChainConfig chains.GeneralChainConfig
-	Bridge             string
-	Erc20Handler       string
-	Erc721Handler      string
-	GenericHandler     string
-	MaxGasPrice        *big.Int
-	GasMultiplier      *big.Float
-	GasLimit           *big.Int
-	Http               bool
-	StartBlock         *big.Int
-	BlockConfirmations *big.Int
+	SharedEVMConfig config.SharedEVMConfig
 }
 
 type RawCeloConfig struct {
-	chains.SharedEVMConfig `mapstructure:",squash"`
+	config.RawSharedEVMConfig `mapstructure:",squash"`
 }
 
 func GetConfig(path string, name string) (*RawCeloConfig, error) {
@@ -57,39 +46,13 @@ func GetConfig(path string, name string) (*RawCeloConfig, error) {
 
 func ParseConfig(rawConfig *RawCeloConfig) (*CeloConfig, error) {
 
+	cfg, err := rawConfig.RawSharedEVMConfig.ParseConfig()
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse shared evm config, error: %w", err)
+	}
+
 	config := &CeloConfig{
-		GeneralChainConfig: rawConfig.GeneralChainConfig,
-		Erc20Handler:       rawConfig.Erc20Handler,
-		Erc721Handler:      rawConfig.Erc721Handler,
-		GenericHandler:     rawConfig.GenericHandler,
-		GasLimit:           big.NewInt(DefaultGasLimit),
-		MaxGasPrice:        big.NewInt(DefaultGasPrice),
-		GasMultiplier:      big.NewFloat(DefaultGasMultiplier),
-		Http:               rawConfig.Http,
-		StartBlock:         big.NewInt(rawConfig.StartBlock),
-		BlockConfirmations: big.NewInt(DefaultBlockConfirmations),
-	}
-
-	if rawConfig.Bridge != "" {
-		config.Bridge = rawConfig.Bridge
-	} else {
-		return nil, fmt.Errorf("must provide opts.bridge field for ethereum config")
-	}
-
-	if rawConfig.GasLimit != 0 {
-		config.GasLimit = big.NewInt(rawConfig.GasLimit)
-	}
-
-	if rawConfig.MaxGasPrice != 0 {
-		config.MaxGasPrice = big.NewInt(rawConfig.MaxGasPrice)
-	}
-
-	if rawConfig.GasMultiplier != 0 {
-		config.GasMultiplier = big.NewFloat(rawConfig.GasMultiplier)
-	}
-
-	if rawConfig.BlockConfirmations != 0 {
-		config.BlockConfirmations = big.NewInt(rawConfig.BlockConfirmations)
+		SharedEVMConfig: *cfg,
 	}
 
 	return config, nil
