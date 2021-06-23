@@ -2,14 +2,6 @@ package client
 
 import (
 	"math/big"
-
-	erc20Handler "github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/ERC20Handler"
-	erc721Handler "github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/ERC721Handler"
-	genericHandler "github.com/ChainSafe/chainbridge-celo-module/bindings/mptp/GenericHandler"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/listener"
-	"github.com/ChainSafe/chainbridge-core/relayer"
-	"github.com/celo-org/celo-blockchain/accounts/abi/bind"
-	"github.com/celo-org/celo-blockchain/common"
 )
 
 type ValidatorsAggregator interface {
@@ -63,75 +55,75 @@ type ValidatorsAggregator interface {
 //m.MPParams = &MerkleProof{TxRootHash: sliceTo32Bytes(blockData.TxHash().Bytes()), Nodes: proof, Key: key}
 //return m, nil
 //}
-
-func (c *CeloClient) ReturnErc20HandlerFabric() listener.EventHandler {
-	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
-		contract, err := erc20Handler.NewERC20HandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
-		if err != nil {
-			return nil, err
-		}
-		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
-		if err != nil {
-			return nil, err
-		}
-		return &relayer.Message{
-			Source:       sourceID,
-			Destination:  destId,
-			DepositNonce: nonce,
-			ResourceId:   record.ResourceID,
-			Type:         relayer.FungibleTransfer,
-			Payload: []interface{}{
-				record.Amount.Bytes(),
-				record.DestinationRecipientAddress,
-			},
-		}, nil
-	}
-}
-
-func (c *CeloClient) ReturnErc721HandlerFabric() listener.EventHandler {
-	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
-		contract, err := erc721Handler.NewERC721HandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
-		if err != nil {
-			return nil, err
-		}
-		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
-		if err != nil {
-			return nil, err
-		}
-		return &relayer.Message{
-			Source:       sourceID,
-			Destination:  destId,
-			DepositNonce: nonce,
-			ResourceId:   record.ResourceID,
-			Type:         relayer.NonFungibleTransfer,
-			Payload: []interface{}{
-				record.TokenID.Bytes(),
-				record.DestinationRecipientAddress,
-				record.MetaData,
-			},
-		}, nil
-	}
-}
-
-func (c *CeloClient) ReturnGenericHandlerFabric() listener.EventHandler {
-	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
-		contract, err := genericHandler.NewGenericHandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
-		if err != nil {
-			return nil, err
-		}
-		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
-		if err != nil {
-			return nil, err
-		}
-		return &relayer.Message{
-			Source:       sourceID,
-			Destination:  destId,
-			DepositNonce: nonce,
-			ResourceId:   record.ResourceID,
-			Type:         relayer.GenericTransfer,
-			Payload: []interface{}{
-				record.MetaData,
-			},
-		}, nil
-	}
-}
+//
+//func (c *CeloClient) ReturnErc20HandlerFabric() listener.EventHandler {
+//	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
+//		contract, err := erc20Handler.NewERC20HandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
+//		if err != nil {
+//			return nil, err
+//		}
+//		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
+//		if err != nil {
+//			return nil, err
+//		}
+//		return &relayer.Message{
+//			Source:       sourceID,
+//			Destination:  destId,
+//			DepositNonce: nonce,
+//			ResourceId:   record.ResourceID,
+//			Type:         relayer.FungibleTransfer,
+//			Payload: []interface{}{
+//				record.Amount.Bytes(),
+//				record.DestinationRecipientAddress,
+//			},
+//		}, nil
+//	}
+//}
+//
+//func (c *CeloClient) ReturnErc721HandlerFabric() listener.EventHandler {
+//	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
+//		contract, err := erc721Handler.NewERC721HandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
+//		if err != nil {
+//			return nil, err
+//		}
+//		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
+//		if err != nil {
+//			return nil, err
+//		}
+//		return &relayer.Message{
+//			Source:       sourceID,
+//			Destination:  destId,
+//			DepositNonce: nonce,
+//			ResourceId:   record.ResourceID,
+//			Type:         relayer.NonFungibleTransfer,
+//			Payload: []interface{}{
+//				record.TokenID.Bytes(),
+//				record.DestinationRecipientAddress,
+//				record.MetaData,
+//			},
+//		}, nil
+//	}
+//}
+//
+//func (c *CeloClient) ReturnGenericHandlerFabric() listener.EventHandler {
+//	return func(sourceID, destId uint8, nonce uint64, handlerContractAddress string) (*relayer.Message, error) {
+//		contract, err := genericHandler.NewGenericHandlerCaller(common.HexToAddress(handlerContractAddress), c.Client)
+//		if err != nil {
+//			return nil, err
+//		}
+//		record, err := contract.GetDepositRecord(&bind.CallOpts{}, uint64(nonce), uint8(destId))
+//		if err != nil {
+//			return nil, err
+//		}
+//		return &relayer.Message{
+//			Source:       sourceID,
+//			Destination:  destId,
+//			DepositNonce: nonce,
+//			ResourceId:   record.ResourceID,
+//			Type:         relayer.GenericTransfer,
+//			Payload: []interface{}{
+//				record.MetaData,
+//			},
+//		}, nil
+//	}
+//}
