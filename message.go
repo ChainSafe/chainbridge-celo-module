@@ -5,7 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 )
 
-type Message struct {
+type CeloMessage struct {
 	//Source       uint8  // Source where message was initiated
 	//Destination  uint8  // Destination chain of message
 	//DepositNonce uint64 // Nonce for the deposit

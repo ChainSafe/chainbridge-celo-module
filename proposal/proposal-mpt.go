@@ -7,7 +7,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ChainSafe/chainbridge-core/chains/evm/evmclient"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/voter"
+
+	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/evmtransaction"
 	"github.com/ChainSafe/chainbridge-core/relayer"
 	"github.com/ethereum/go-ethereum"
@@ -19,7 +21,7 @@ import (
 	"github.com/status-im/keycard-go/hexutils"
 )
 
-type Proposal struct {
+type ProposalMPT struct {
 	Source         uint8  // Source where message was initiated
 	Destination    uint8  // Destination chain of message
 	DepositNonce   uint64 // Nonce for the deposit
@@ -28,19 +30,21 @@ type Proposal struct {
 	Data           []byte
 	HandlerAddress common.Address
 	BridgeAddress  common.Address
+	MPParams       *MerkleProof
+	SVParams       *SignatureVerification
 }
 
-type CeloChainClient interface {
-	SignAndSendTransaction(ctx context.Context, tx evmclient.CommonTransaction) (common.Hash, error)
-	CallContract(ctx context.Context, callArgs map[string]interface{}, blockNumber *big.Int) ([]byte, error)
-	UnsafeNonce() (*big.Int, error)
-	LockNonce()
-	UnlockNonce()
-	UnsafeIncreaseNonce() error
-	GasPrice() (*big.Int, error)
-}
+//type CeloChainClient interface {
+//	SignAndSendTransaction(ctx context.Context, tx evmclient.CommonTransaction) (common.Hash, error)
+//	CallContract(ctx context.Context, callArgs map[string]interface{}, blockNumber *big.Int) ([]byte, error)
+//	UnsafeNonce() (*big.Int, error)
+//	LockNonce()
+//	UnlockNonce()
+//	UnsafeIncreaseNonce() error
+//	GasPrice() (*big.Int, error)
+//}
 
-func (p *Proposal) Status(evmCaller CeloChainClient) (relayer.ProposalStatus, error) {
+func (p *ProposalMPT) Status(evmCaller voter.ChainClient) (relayer.ProposalStatus, error) {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"originChainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"dataHash\",\"type\":\"bytes32\"}],\"name\":\"getProposal\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"_resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_dataHash\",\"type\":\"bytes32\"},{\"internalType\":\"address[]\",\"name\":\"_yesVotes\",\"type\":\"address[]\"},{\"internalType\":\"address[]\",\"name\":\"_noVotes\",\"type\":\"address[]\"},{\"internalType\":\"enumBridge.ProposalStatus\",\"name\":\"_status\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_proposedBlock\",\"type\":\"uint256\"}],\"internalType\":\"structBridge.Proposal\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\",\"constant\":true}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -71,7 +75,7 @@ func (p *Proposal) Status(evmCaller CeloChainClient) (relayer.ProposalStatus, er
 	return relayer.ProposalStatus(out0.Status), nil
 }
 
-func (p *Proposal) VotedBy(evmCaller CeloChainClient, by common.Address) (bool, error) {
+func (p *ProposalMPT) VotedBy(evmCaller voter.ChainClient, by common.Address) (bool, error) {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint72\",\"name\":\"\",\"type\":\"uint72\"},{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"_hasVotedOnProposal\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -91,7 +95,7 @@ func (p *Proposal) VotedBy(evmCaller CeloChainClient, by common.Address) (bool, 
 	return out0, nil
 }
 
-func (p *Proposal) Execute(client CeloChainClient) error {
+func (p *ProposalMPT) Execute(client voter.ChainClient) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signatureHeader\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"aggregatePublicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"hashedMessage\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"rootHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"key\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"nodes\",\"type\":\"bytes\"}],\"name\":\"executeProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"constant\":false}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -111,7 +115,7 @@ func (p *Proposal) Execute(client CeloChainClient) error {
 	if err != nil {
 		return err
 	}
-	tx := evmtransaction.NewTransaction(n.Uint64(), p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
+	tx := transaction.NewCeloTransaction(n.Uint64(), p.BridgeAddress, big.NewInt(0), gasLimit, gp, nil, nil, nil, input)
 	h, err := client.SignAndSendTransaction(context.TODO(), tx)
 	if err != nil {
 		return err
@@ -125,7 +129,7 @@ func (p *Proposal) Execute(client CeloChainClient) error {
 	return nil
 }
 
-func (p *Proposal) Vote(client CeloChainClient) error {
+func (p *ProposalMPT) Vote(client voter.ChainClient) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dataHash\",\"type\":\"bytes32\"}],\"name\":\"voteProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -160,7 +164,7 @@ func (p *Proposal) Vote(client CeloChainClient) error {
 }
 
 // CreateProposalDataHash constructs and returns proposal data hash
-func (p *Proposal) GetDataHash() common.Hash {
+func (p *ProposalMPT) GetDataHash() common.Hash {
 	b := bytes.NewBuffer(p.HandlerAddress.Bytes())
 	b.Write(p.Data)
 	//b.Write(mp.TxRootHash[:])
@@ -197,4 +201,23 @@ func toCallArg(msg ethereum.CallMsg) map[string]interface{} {
 		arg["gasPrice"] = (*hexutil.Big)(msg.GasPrice)
 	}
 	return arg
+}
+
+type MerkleProof struct {
+	TxRootHash [32]byte // Expected root of trie, in our case should be transactionsRoot from block
+	Key        []byte   // RLP encoding of tx index, for the tx we want to prove
+	Nodes      []byte   // The actual proof, all the nodes of the trie that between leaf value and root
+}
+
+type SignatureVerification struct {
+	AggregatePublicKey []byte      // Aggregated public key of block validators
+	BlockHash          common.Hash // Hash of block we are proving
+	Signature          []byte      // Signature of block we are proving
+	RLPHeader          []byte      // RLP encoding of header data
+}
+
+func sliceTo32Bytes(in []byte) [32]byte {
+	var res [32]byte
+	copy(res[:], in)
+	return res
 }
