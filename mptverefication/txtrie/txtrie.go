@@ -83,7 +83,7 @@ func keybytesToHex(str []byte) []byte {
 
 // VerifyProof verifies merkle proof on path key against the provided root
 func VerifyProof(root common.Hash, key []byte, proof ethdb.KeyValueStore) (bool, error) {
-	exists, _, err := ethtrie.VerifyProof(root, key, proof)
+	exists, err := ethtrie.VerifyProof(root, key, proof)
 
 	if err != nil {
 		return false, err

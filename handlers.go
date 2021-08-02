@@ -43,9 +43,9 @@ type ValidatorsAggregator interface {
 //	return nil, err
 //
 //}
-//keyRlp, err := rlp.EncodeToBytes(txIndex)
+//keyRlp, err := celorlp.EncodeToBytes(txIndex)
 //if err != nil {
-//	return nil, fmt.Errorf("encoding TxIndex to rlp: %w", err)
+//	return nil, fmt.Errorf("encoding TxIndex to celorlp: %w", err)
 //}
 //proof, key, err := txtrie.RetrieveProof(trie, keyRlp)
 //if err != nil {

@@ -21,7 +21,7 @@ import (
 	"github.com/status-im/keycard-go/hexutils"
 )
 
-type ProposalMPT struct {
+type ProposalWithMPTVerification struct {
 	Source         uint8  // Source where message was initiated
 	Destination    uint8  // Destination chain of message
 	DepositNonce   uint64 // Nonce for the deposit
@@ -44,7 +44,7 @@ type ProposalMPT struct {
 //	GasPrice() (*big.Int, error)
 //}
 
-func (p *ProposalMPT) Status(evmCaller voter.ChainClient) (relayer.ProposalStatus, error) {
+func (p *ProposalWithMPTVerification) Status(evmCaller voter.ChainClient) (relayer.ProposalStatus, error) {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"originChainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"dataHash\",\"type\":\"bytes32\"}],\"name\":\"getProposal\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes32\",\"name\":\"_resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"_dataHash\",\"type\":\"bytes32\"},{\"internalType\":\"address[]\",\"name\":\"_yesVotes\",\"type\":\"address[]\"},{\"internalType\":\"address[]\",\"name\":\"_noVotes\",\"type\":\"address[]\"},{\"internalType\":\"enumBridge.ProposalStatus\",\"name\":\"_status\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"_proposedBlock\",\"type\":\"uint256\"}],\"internalType\":\"structBridge.Proposal\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\",\"constant\":true}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -75,7 +75,7 @@ func (p *ProposalMPT) Status(evmCaller voter.ChainClient) (relayer.ProposalStatu
 	return relayer.ProposalStatus(out0.Status), nil
 }
 
-func (p *ProposalMPT) VotedBy(evmCaller voter.ChainClient, by common.Address) (bool, error) {
+func (p *ProposalWithMPTVerification) VotedBy(evmCaller voter.ChainClient, by common.Address) (bool, error) {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint72\",\"name\":\"\",\"type\":\"uint72\"},{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"_hasVotedOnProposal\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -95,7 +95,7 @@ func (p *ProposalMPT) VotedBy(evmCaller voter.ChainClient, by common.Address) (b
 	return out0, nil
 }
 
-func (p *ProposalMPT) Execute(client voter.ChainClient) error {
+func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signatureHeader\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"aggregatePublicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"hashedMessage\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"rootHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"key\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"nodes\",\"type\":\"bytes\"}],\"name\":\"executeProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"constant\":false}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -129,7 +129,7 @@ func (p *ProposalMPT) Execute(client voter.ChainClient) error {
 	return nil
 }
 
-func (p *ProposalMPT) Vote(client voter.ChainClient) error {
+func (p *ProposalWithMPTVerification) Vote(client voter.ChainClient) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dataHash\",\"type\":\"bytes32\"}],\"name\":\"voteProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -164,7 +164,7 @@ func (p *ProposalMPT) Vote(client voter.ChainClient) error {
 }
 
 // CreateProposalDataHash constructs and returns proposal data hash
-func (p *ProposalMPT) GetDataHash() common.Hash {
+func (p *ProposalWithMPTVerification) GetDataHash() common.Hash {
 	b := bytes.NewBuffer(p.HandlerAddress.Bytes())
 	b.Write(p.Data)
 	//b.Write(mp.TxRootHash[:])

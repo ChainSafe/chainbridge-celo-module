@@ -2,7 +2,7 @@ module github.com/ChainSafe/chainbridge-celo-module
 
 go 1.16
 
-replace github.com/celo-org/celo-bls-go => github.com/celo-org/celo-bls-go v0.1.7
+replace github.com/ChainSafe/chainbridge-core => /var/www/Chainsafe/chainbridge-core
 
 require (
 	github.com/ChainSafe/chainbridge-core v0.0.0-20210702085934-c073bc8c16a4

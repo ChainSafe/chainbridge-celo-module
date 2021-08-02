@@ -1,4 +1,4 @@
-package client
+package mptverefication
 
 import (
 	"github.com/ChainSafe/chainbridge-core/relayer"
