@@ -4,11 +4,11 @@ import (
 	"crypto/ecdsa"
 	"encoding/json"
 	"errors"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/evmclient"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/rs/zerolog/log"
 	"golang.org/x/crypto/sha3"
 	"io"
 	"math/big"
@@ -27,8 +27,8 @@ var (
 	ErrEthCompatibleTransactionIsntCompatible = errors.New("ethCompatible is true, but non-eth-compatible fields are present")
 )
 
-func NewCeloTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, feeCurrency, gatewayFeeRecipient *common.Address, gatewayFee *big.Int, data []byte) *CeloTransaction {
-	return newTransaction(nonce, to, amount, gasLimit, gasPrice, feeCurrency, gatewayFeeRecipient, gatewayFee, data)
+func NewCeloTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) evmclient.CommonTransaction {
+	return newTransaction(nonce, to, amount, gasLimit, gasPrice, nil, nil, nil, data)
 }
 
 type CeloTransaction struct {
@@ -342,7 +342,6 @@ func (tx *CeloTransaction) WithSignature(signer CeloSigner, sig []byte) (*CeloTr
 
 func (tx *CeloTransaction) RawWithSignature(key *ecdsa.PrivateKey, chainID *big.Int) ([]byte, error) {
 	opts := NewKeyedTransactor(key)
-
 	signedTx, err := opts.Signer(HomesteadSigner{}, crypto.PubkeyToAddress(key.PublicKey), tx)
 	if err != nil {
 		return nil, err
@@ -351,7 +350,6 @@ func (tx *CeloTransaction) RawWithSignature(key *ecdsa.PrivateKey, chainID *big.
 	if err != nil {
 		return nil, err
 	}
-	log.Debug().Msgf("%s", signedTx.Hash().String())
 	return rawTX, nil
 }
 
