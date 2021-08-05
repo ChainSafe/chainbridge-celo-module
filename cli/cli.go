@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/ChainSafe/chainbridge-core/config"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +13,7 @@ var CeloRootCLI = &cobra.Command{
 
 func init() {
 	// persistent flags
-	config.BindEVMCLIFlags(CeloRootCLI)
+	flags.BindEVMCLIFlags(CeloRootCLI)
 
 	// add commands to celo-cli root
 	// deploy

@@ -1,6 +1,6 @@
 module github.com/ChainSafe/chainbridge-celo-module
 
-go 1.16
+go 1.15
 
 replace github.com/ChainSafe/chainbridge-core => ../chainbridge-core
 
