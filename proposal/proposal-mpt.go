@@ -115,7 +115,7 @@ func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient) error {
 	if err != nil {
 		return err
 	}
-	tx := transaction.NewCeloTransaction(n.Uint64(), p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
+	tx := transaction.NewCeloTransaction(n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
 	h, err := client.SignAndSendTransaction(context.TODO(), tx)
 	if err != nil {
 		return err
@@ -149,7 +149,7 @@ func (p *ProposalWithMPTVerification) Vote(client voter.ChainClient) error {
 	if err != nil {
 		return err
 	}
-	tx := evmtransaction.NewTransaction(n.Uint64(), p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
+	tx := evmtransaction.NewTransaction(n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
 	h, err := client.SignAndSendTransaction(context.TODO(), tx)
 	if err != nil {
 		return err

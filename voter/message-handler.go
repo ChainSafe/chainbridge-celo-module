@@ -31,7 +31,7 @@ func ERC20CeloMessageHandler(m *relayer.Message, handlerAddr, bridgeAddress comm
 	data = append(data, common.LeftPadBytes(recipientLen, 32)...) // length of recipient (uint256)
 	data = append(data, recipient...)                             // recipient ([]byte)
 
-	return &proposal.ProposalWithMPTVerification{
+	return proposal.ProposalWithMPTVerification{
 		Source:         m.Source,
 		DepositNonce:   m.DepositNonce,
 		ResourceId:     m.ResourceId,
