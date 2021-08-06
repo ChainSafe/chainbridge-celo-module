@@ -7,7 +7,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
 var DeployCELO = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy smart contracts",
