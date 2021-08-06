@@ -342,7 +342,7 @@ func (tx *CeloTransaction) WithSignature(signer CeloSigner, sig []byte) (*CeloTr
 
 func (tx *CeloTransaction) RawWithSignature(key *ecdsa.PrivateKey, chainID *big.Int) ([]byte, error) {
 	opts := NewKeyedTransactor(key)
-	signedTx, err := opts.Signer(HomesteadSigner{}, crypto.PubkeyToAddress(key.PublicKey), tx)
+	signedTx, err := opts.Signer(NewEIP155Signer(chainID), crypto.PubkeyToAddress(key.PublicKey), tx)
 	if err != nil {
 		return nil, err
 	}
