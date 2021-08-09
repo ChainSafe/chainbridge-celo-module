@@ -25,6 +25,8 @@ func init() {
 	// // bridge
 	CeloRootCLI.AddCommand(BridgeCELOCMD)
 
+	CeloRootCLI.AddCommand(ERC20CeloCMD)
+
 	// // erc20
 	// celoRootCLI.AddCommand(erc20.ERC20Cmd)
 
