@@ -22,15 +22,15 @@ var addMinterCmd = &cobra.Command{
 	},
 }
 
-// var allowanceCmd = &cobra.Command{
-// 	Use:   "allowance",
-// 	Short: "Set a token contract as mintable/burnable",
-// 	Long:  "Set a token contract as mintable/burnable in a handler",
-// 	RunE: func(cmd *cobra.Command, args []string) error {
-// 		txFabric := transaction.NewCeloTransaction
-// 		return erc20.AllowanceCmd(cmd, args, txFabric)
-// 	},
-// }
+var allowanceCmd = &cobra.Command{
+	Use:   "allowance",
+	Short: "Set a token contract as mintable/burnable",
+	Long:  "Set a token contract as mintable/burnable in a handler",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		txFabric := transaction.NewCeloTransaction
+		return erc20.AllowanceCmd(cmd, args, txFabric)
+	},
+}
 
 var approveCmd = &cobra.Command{
 	Use:   "approve",
@@ -56,6 +56,6 @@ func init() {
 	erc20.BindApproveCmdFlags(approveCmd)
 	erc20.BindDepositCmdFlags(depositCmd)
 	erc20.BindAddMinterCmdFlags(addMinterCmd)
-	// erc20.BindAllowanceCmdFlags(allowanceCmd)
+	erc20.BindAllowanceCmdFlags(allowanceCmd)
 	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd)
 }

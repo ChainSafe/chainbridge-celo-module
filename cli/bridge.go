@@ -39,8 +39,8 @@ var setBurnCeloCmd = &cobra.Command{
 // register-generic-resource
 
 func init() {
-	bridge.BindBridgeRegisterResourceCmdFlags(registerResourceCeloCmd)
-	bridge.BindBridgeSetBurnCmdFlags(setBurnCeloCmd)
+	bridge.BindRegisterResourceCmdFlags(registerResourceCeloCmd)
+	bridge.BindSetBurnCmdFlags(setBurnCeloCmd)
 
 	BridgeCeloCmd.AddCommand(registerResourceCeloCmd, setBurnCeloCmd)
 }
