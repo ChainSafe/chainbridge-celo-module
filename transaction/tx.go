@@ -4,17 +4,17 @@ import (
 	"crypto/ecdsa"
 	"encoding/json"
 	"errors"
+	"io"
+	"math/big"
+	"sync/atomic"
+
 	"github.com/ChainSafe/chainbridge-core/chains/evm/evmclient"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/rlp"
 	"golang.org/x/crypto/sha3"
-	"io"
-	"math/big"
-	"sync/atomic"
 )
-
 
 const (
 	ethCompatibleTxNumFields = 9
@@ -353,7 +353,6 @@ func (tx *CeloTransaction) RawWithSignature(key *ecdsa.PrivateKey, chainID *big.
 	return rawTX, nil
 }
 
-
 // Cost returns amount + gasprice * gaslimit + gatewayfee.
 func (tx *CeloTransaction) Cost() *big.Int {
 	total := new(big.Int).Mul(tx.data.Price, new(big.Int).SetUint64(tx.data.GasLimit))
@@ -400,7 +399,6 @@ func TxDifference(a, b CeloTransactions) CeloTransactions {
 
 	return keep
 }
-
 
 // Message is a fully derived transaction and implements core.Message
 //
@@ -453,7 +451,6 @@ func (m Message) Fee() *big.Int {
 	gasFee := new(big.Int).Mul(m.gasPrice, big.NewInt(int64(m.gasLimit)))
 	return gasFee.Add(gasFee, m.gatewayFee)
 }
-
 
 var _ = (*txdataMarshaling)(nil)
 
@@ -567,7 +564,6 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 	}
 	return nil
 }
-
 
 func rlpHash(x interface{}) (h common.Hash) {
 	hw := sha3.NewLegacyKeccak256()
