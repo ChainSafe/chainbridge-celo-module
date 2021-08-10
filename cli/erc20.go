@@ -6,61 +6,56 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var ERC20CELOCMD = &cobra.Command{
+var ERC20CeloCmd = &cobra.Command{
 	Use:   "erc20",
-	Short: "ERC20-related instructions",
-	Long:  "ERC20-related instructions",
+	Short: "erc20-related instructions",
+	Long:  "erc20-related instructions",
 }
 
-var AddMinterCeloCMD = &cobra.Command{
+var addMinterCmd = &cobra.Command{
 	Use:   "add-minter",
 	Short: "Add a minter to an Erc20 mintable contract",
 	Long:  "Add a minter to an Erc20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.AddMinterEVMCMD(cmd, args, txFabric)
+		return erc20.AddMinterCmd(cmd, args, txFabric)
 	},
 }
 
-// var AllowanceCeloCMD = &cobra.Command{
+// var allowanceCmd = &cobra.Command{
 // 	Use:   "allowance",
 // 	Short: "Set a token contract as mintable/burnable",
 // 	Long:  "Set a token contract as mintable/burnable in a handler",
 // 	RunE: func(cmd *cobra.Command, args []string) error {
 // 		txFabric := transaction.NewCeloTransaction
-// 		return erc20.AllowanceEVMCMD(cmd, args, txFabric)
+// 		return erc20.AllowanceCmd(cmd, args, txFabric)
 // 	},
 // }
 
-var DepositCeloCMD = &cobra.Command{
+var approveCmd = &cobra.Command{
+	Use:   "approve",
+	Short: "Approve tokens in an ERC20 contract for transfer",
+	Long:  "Approve tokens in an ERC20 contract for transfer",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		txFabric := transaction.NewCeloTransaction
+		return erc20.ApproveCmd(cmd, args, txFabric)
+	},
+}
+
+var depositCmd = &cobra.Command{
 	Use:   "deposit",
 	Short: "Initiate a transfer of ERC20 tokens",
 	Long:  "Initiate a transfer of ERC20 tokens",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.DepositEVMCMD(cmd, args, txFabric)
+		return erc20.DepositCmd(cmd, args, txFabric)
 	},
 }
-
-var MintCeloCMD = &cobra.Command{
-	Use:   "mint",
-	Short: "Mint tokens on an ERC20 mintable contract",
-	Long:  "Mint tokens on an ERC20 mintable contract",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.MintEVMCMD(cmd, args, txFabric)
-	},
-}
-
-// TODO:
-// allowance
-// approve
-// balance
 
 func init() {
-	erc20.BindERC20AddMinterCLIFlags(AddMinterCeloCMD)
-	erc20.BindERC20DepositCLIFlags(DepositCeloCMD)
-	erc20.BindERC20MintCLIFlags(MintCeloCMD)
-	// erc20.BindERC20AllowanceCLIFlags(AllowanceCeloCMD)
-	ERC20CELOCMD.AddCommand(AddMinterCeloCMD, DepositCeloCMD, MintCeloCMD)
+	erc20.BindApproveCmdFlags(approveCmd)
+	erc20.BindDepositCmdFlags(depositCmd)
+	erc20.BindAddMinterCmdFlags(addMinterCmd)
+	// erc20.BindAllowanceCmdFlags(allowanceCmd)
+	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd)
 }
