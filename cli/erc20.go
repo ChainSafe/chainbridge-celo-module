@@ -52,10 +52,21 @@ var depositCmd = &cobra.Command{
 	},
 }
 
+var mintCmd = &cobra.Command{
+	Use:   "deposit",
+	Short: "Initiate a transfer of ERC20 tokens",
+	Long:  "Initiate a transfer of ERC20 tokens",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		txFabric := transaction.NewCeloTransaction
+		return erc20.MintCmd(cmd, args, txFabric)
+	},
+}
+
 func init() {
 	erc20.BindApproveCmdFlags(approveCmd)
 	erc20.BindDepositCmdFlags(depositCmd)
 	erc20.BindAddMinterCmdFlags(addMinterCmd)
 	erc20.BindAllowanceCmdFlags(allowanceCmd)
+	erc20.BindMintCmdFlags(mintCmd)
 	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd)
 }

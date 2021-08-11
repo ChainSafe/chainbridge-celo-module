@@ -12,7 +12,7 @@ var BridgeCeloCmd = &cobra.Command{
 	Long:  "Bridge-related instructions",
 }
 
-var registerResourceCeloCmd = &cobra.Command{
+var registerResourceCmd = &cobra.Command{
 	Use:   "register-resource",
 	Short: "Register a resource ID",
 	Long:  "Register a resource ID with a contract address for a handler",
@@ -22,7 +22,7 @@ var registerResourceCeloCmd = &cobra.Command{
 	},
 }
 
-var setBurnCeloCmd = &cobra.Command{
+var setBurnCmd = &cobra.Command{
 	Use:   "set-burn",
 	Short: "Set a token contract as mintable/burnable",
 	Long:  "Set a token contract as mintable/burnable in a handler",
@@ -39,8 +39,8 @@ var setBurnCeloCmd = &cobra.Command{
 // register-generic-resource
 
 func init() {
-	bridge.BindRegisterResourceCmdFlags(registerResourceCeloCmd)
-	bridge.BindSetBurnCmdFlags(setBurnCeloCmd)
+	bridge.BindRegisterResourceCmdFlags(registerResourceCmd)
+	bridge.BindSetBurnCmdFlags(setBurnCmd)
 
-	BridgeCeloCmd.AddCommand(registerResourceCeloCmd, setBurnCeloCmd)
+	BridgeCeloCmd.AddCommand(registerResourceCmd, setBurnCmd)
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DeployCELO = &cobra.Command{
+var DeployCeloCmd = &cobra.Command{
 	Use:   "deploy",
 	Short: "Deploy smart contracts",
 	Long:  "This command can be used to deploy all or some of the contracts required for bridging. Selection of contracts can be made by either specifying --all or a subset of flags",
@@ -18,5 +18,5 @@ var DeployCELO = &cobra.Command{
 }
 
 func init() {
-	deploy.BindDeployEVMFlags(DeployCELO)
+	deploy.BindDeployEVMFlags(DeployCeloCmd)
 }

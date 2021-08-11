@@ -17,7 +17,7 @@ func init() {
 
 	// add commands to celo-cli root
 	// deploy
-	CeloRootCLI.AddCommand(DeployCELO)
+	CeloRootCLI.AddCommand(DeployCeloCmd)
 
 	// // admin
 	// celoRootCLI.AddCommand(admin.AdminCmd)
@@ -25,10 +25,8 @@ func init() {
 	// // bridge
 	CeloRootCLI.AddCommand(BridgeCeloCmd)
 
-	CeloRootCLI.AddCommand(ERC20CeloCmd)
-
 	// // erc20
-	// celoRootCLI.AddCommand(erc20.ERC20Cmd)
+	CeloRootCLI.AddCommand(ERC20CeloCmd)
 
 	// // erc721
 	// celoRootCLI.AddCommand(erc721.ERC721Cmd)
