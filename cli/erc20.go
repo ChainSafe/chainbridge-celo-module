@@ -68,5 +68,5 @@ func init() {
 	erc20.BindAddMinterCmdFlags(addMinterCmd)
 	erc20.BindAllowanceCmdFlags(allowanceCmd)
 	erc20.BindMintCmdFlags(mintCmd)
-	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd, mintCmd)
+	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd, allowanceCmd, mintCmd)
 }
