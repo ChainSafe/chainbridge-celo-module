@@ -62,11 +62,22 @@ var mintCmd = &cobra.Command{
 	},
 }
 
+var balanceCmd = &cobra.Command{
+	Use:   "balance",
+	Short: "Query balance of an account in an ERC20 contract",
+	Long:  "Query balance of an account in an ERC20 contract",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		txFabric := transaction.NewCeloTransaction
+		return erc20.BalanceCmd(cmd, args, txFabric)
+	},
+}
+
 func init() {
 	erc20.BindApproveCmdFlags(approveCmd)
 	erc20.BindDepositCmdFlags(depositCmd)
 	erc20.BindAddMinterCmdFlags(addMinterCmd)
 	erc20.BindAllowanceCmdFlags(allowanceCmd)
 	erc20.BindMintCmdFlags(mintCmd)
-	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd, allowanceCmd, mintCmd)
+	erc20.BindBalanceCmdFlags(balanceCmd)
+	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd, allowanceCmd, mintCmd, balanceCmd)
 }
