@@ -53,9 +53,9 @@ var depositCmd = &cobra.Command{
 }
 
 var mintCmd = &cobra.Command{
-	Use:   "deposit",
-	Short: "Initiate a transfer of ERC20 tokens",
-	Long:  "Initiate a transfer of ERC20 tokens",
+	Use:   "mint",
+	Short: "Mint tokens on an ERC20 mintable contract",
+	Long:  "Mint tokens on an ERC20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
 		return erc20.MintCmd(cmd, args, txFabric)
