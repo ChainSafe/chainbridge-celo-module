@@ -9,6 +9,7 @@ import (
 	"sync/atomic"
 
 	"github.com/ChainSafe/chainbridge-core/chains/evm/evmclient"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -27,8 +28,12 @@ var (
 	ErrEthCompatibleTransactionIsntCompatible = errors.New("ethCompatible is true, but non-eth-compatible fields are present")
 )
 
-func NewCeloTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) evmclient.CommonTransaction {
-	return newTransaction(nonce, to, amount, gasLimit, gasPrice, nil, nil, nil, data)
+func NewCeloTransaction(chainId *big.Int, nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPricer evmgaspricer.GasPricer, data []byte) (evmclient.CommonTransaction, error) {
+	gasPrices, err := gasPricer.GasPrice()
+	if err != nil {
+		return nil, err
+	}
+	return newTransaction(nonce, to, amount, gasLimit, gasPrices[0], nil, nil, nil, data), nil
 }
 
 type CeloTransaction struct {

@@ -7,10 +7,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/voter"
 
-	"github.com/ChainSafe/chainbridge-celo-module/transaction"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/evmtransaction"
 	"github.com/ChainSafe/chainbridge-core/relayer"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -95,7 +94,7 @@ func (p *ProposalWithMPTVerification) VotedBy(evmCaller voter.ChainClient, by co
 	return out0, nil
 }
 
-func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient) error {
+func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient, fabric voter.TxFabric) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signatureHeader\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"aggregatePublicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"hashedMessage\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"rootHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"key\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"nodes\",\"type\":\"bytes\"}],\"name\":\"executeProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\",\"constant\":false}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -106,16 +105,26 @@ func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient) error {
 		return err
 	}
 	gasLimit := uint64(2000000)
-	gp, err := client.GasPrice()
-	if err != nil {
-		return err
-	}
+
 	client.LockNonce()
+	defer client.UnlockNonce()
+
 	n, err := client.UnsafeNonce()
 	if err != nil {
 		return err
 	}
-	tx := transaction.NewCeloTransaction(n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
+
+	cId, err := client.ChainID(context.TODO())
+	if err != nil {
+		return err
+	}
+
+	gasPricer := evmgaspricer.NewDefaultGasPricer(client)
+	tx, err := fabric(cId, n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gasPricer, input)
+	if err != nil {
+		return err
+	}
+
 	h, err := client.SignAndSendTransaction(context.TODO(), tx)
 	if err != nil {
 		return err
@@ -124,12 +133,11 @@ func (p *ProposalWithMPTVerification) Execute(client voter.ChainClient) error {
 	if err != nil {
 		return err
 	}
-	client.UnlockNonce()
 	log.Debug().Str("hash", h.Hex()).Msgf("Executed")
 	return nil
 }
 
-func (p *ProposalWithMPTVerification) Vote(client voter.ChainClient) error {
+func (p *ProposalWithMPTVerification) Vote(client voter.ChainClient, fabric voter.TxFabric) error {
 	definition := "[{\"inputs\":[{\"internalType\":\"uint8\",\"name\":\"chainID\",\"type\":\"uint8\"},{\"internalType\":\"uint64\",\"name\":\"depositNonce\",\"type\":\"uint64\"},{\"internalType\":\"bytes32\",\"name\":\"resourceID\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"dataHash\",\"type\":\"bytes32\"}],\"name\":\"voteProposal\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]"
 	a, err := abi.JSON(strings.NewReader(definition))
 	if err != nil {
@@ -140,16 +148,26 @@ func (p *ProposalWithMPTVerification) Vote(client voter.ChainClient) error {
 		return err
 	}
 	gasLimit := uint64(1000000)
-	gp, err := client.GasPrice()
-	if err != nil {
-		return err
-	}
+
 	client.LockNonce()
+	defer client.UnlockNonce()
+
 	n, err := client.UnsafeNonce()
 	if err != nil {
 		return err
 	}
-	tx := evmtransaction.NewTransaction(n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gp, input)
+
+	cId, err := client.ChainID(context.TODO())
+	if err != nil {
+		return err
+	}
+
+	gasPricer := evmgaspricer.NewDefaultGasPricer(client)
+	tx, err := fabric(cId, n.Uint64(), &p.BridgeAddress, big.NewInt(0), gasLimit, gasPricer, input)
+	if err != nil {
+		return err
+	}
+
 	h, err := client.SignAndSendTransaction(context.TODO(), tx)
 	if err != nil {
 		return err
