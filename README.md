@@ -5,6 +5,15 @@
 
 Chainbridge celo module is the part of Chainbrige-core framework. This module brings support of celo compatible client module.
 
+*Project still in deep beta*
+- Chat with us on [discord](https://discord.gg/ykXsJKfhgq).
+
+### Table of Contents
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Differences Between EVM and Celo](#differences-between-evm-and-celo)
+
 ## Installation
 Refer to [installation](https://github.com/ChainSafe/chainbridge-docs/blob/develop/docs/installation.md) guide for assistance in installing.
 
