@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/erc20"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +19,7 @@ var addMinterCmd = &cobra.Command{
 	Long:  "Add a minter to an Erc20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.AddMinterCmd(cmd, args, txFabric)
+		return erc20.AddMinterCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 
@@ -38,7 +39,7 @@ var approveCmd = &cobra.Command{
 	Long:  "Approve tokens in an ERC20 contract for transfer",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.ApproveCmd(cmd, args, txFabric)
+		return erc20.ApproveCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 
@@ -48,7 +49,7 @@ var depositCmd = &cobra.Command{
 	Long:  "Initiate a transfer of ERC20 tokens",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.DepositCmd(cmd, args, txFabric)
+		return erc20.DepositCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 
@@ -58,7 +59,7 @@ var mintCmd = &cobra.Command{
 	Long:  "Mint tokens on an ERC20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return erc20.MintCmd(cmd, args, txFabric)
+		return erc20.MintCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 

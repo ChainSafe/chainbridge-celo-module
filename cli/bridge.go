@@ -3,6 +3,7 @@ package cli
 import (
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/bridge"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +19,7 @@ var registerResourceCmd = &cobra.Command{
 	Long:  "Register a resource ID with a contract address for a handler",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return bridge.RegisterResourceCmd(cmd, args, txFabric)
+		return bridge.RegisterResourceCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 
@@ -28,7 +29,7 @@ var setBurnCmd = &cobra.Command{
 	Long:  "Set a token contract as mintable/burnable in a handler",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
-		return bridge.SetBurnCmd(cmd, args, txFabric)
+		return bridge.SetBurnCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
 }
 

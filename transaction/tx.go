@@ -27,8 +27,8 @@ var (
 	ErrEthCompatibleTransactionIsntCompatible = errors.New("ethCompatible is true, but non-eth-compatible fields are present")
 )
 
-func NewCeloTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) evmclient.CommonTransaction {
-	return newTransaction(nonce, to, amount, gasLimit, gasPrice, nil, nil, nil, data)
+func NewCeloTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice []*big.Int, data []byte) (evmclient.CommonTransaction, error) {
+	return newTransaction(nonce, to, amount, gasLimit, gasPrice, nil, nil, nil, data), nil
 }
 
 type CeloTransaction struct {
@@ -127,7 +127,7 @@ func fromEthCompatibleRlpList(data ethCompatibleTxRlpList) txdata {
 	}
 }
 
-func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, feeCurrency, gatewayFeeRecipient *common.Address, gatewayFee *big.Int, data []byte) *CeloTransaction {
+func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit uint64, gasPrice []*big.Int, feeCurrency, gatewayFeeRecipient *common.Address, gatewayFee *big.Int, data []byte) *CeloTransaction {
 	if len(data) > 0 {
 		data = common.CopyBytes(data)
 	}
@@ -151,8 +151,8 @@ func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit 
 	if gatewayFee != nil {
 		d.GatewayFee.Set(gatewayFee)
 	}
-	if gasPrice != nil {
-		d.Price.Set(gasPrice)
+	if len(gasPrice) != 0 {
+		d.Price.Set(gasPrice[0])
 	}
 
 	return &CeloTransaction{data: d}
