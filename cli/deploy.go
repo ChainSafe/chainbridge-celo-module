@@ -16,6 +16,14 @@ var DeployCeloCmd = &cobra.Command{
 		txFabric := transaction.NewCeloTransaction
 		return coreDeployCLI.DeployCLI(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := coreDeployCLI.ValidateDeployFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+		err = coreDeployCLI.ProcessDeployFlags(cmd, args)
+		return err
+	},
 }
 
 func init() {

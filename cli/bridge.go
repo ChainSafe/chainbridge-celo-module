@@ -21,6 +21,15 @@ var registerResourceCmd = &cobra.Command{
 		txFabric := transaction.NewCeloTransaction
 		return bridge.RegisterResourceCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := bridge.ValidateRegisterResourceFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		err = bridge.ProcessRegisterResourceFlags(cmd, args)
+		return err
+	},
 }
 
 var setBurnCmd = &cobra.Command{
@@ -30,6 +39,15 @@ var setBurnCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
 		return bridge.SetBurnCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := bridge.ValidateSetBurnFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		bridge.ProcessSetBurnFlags(cmd, args)
+		return nil
 	},
 }
 

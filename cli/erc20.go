@@ -21,6 +21,14 @@ var addMinterCmd = &cobra.Command{
 		txFabric := transaction.NewCeloTransaction
 		return erc20.AddMinterCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := erc20.ValidateAddMinterFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+		erc20.ProcessAddMinterFlags(cmd, args)
+		return nil
+	},
 }
 
 var allowanceCmd = &cobra.Command{
@@ -41,6 +49,15 @@ var approveCmd = &cobra.Command{
 		txFabric := transaction.NewCeloTransaction
 		return erc20.ApproveCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := erc20.ValidateApproveFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		err = erc20.ProcessApproveFlags(cmd, args)
+		return err
+	},
 }
 
 var depositCmd = &cobra.Command{
@@ -50,6 +67,18 @@ var depositCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
 		return erc20.DepositCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := erc20.ValidateDepositFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		err = erc20.ProcessDepositFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+		return nil
 	},
 }
 
@@ -61,6 +90,15 @@ var mintCmd = &cobra.Command{
 		txFabric := transaction.NewCeloTransaction
 		return erc20.MintCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
 	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := erc20.ValidateMintFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		err = erc20.ProcessMintFlags(cmd, args)
+		return err
+	},
 }
 
 var balanceCmd = &cobra.Command{
@@ -70,6 +108,15 @@ var balanceCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		txFabric := transaction.NewCeloTransaction
 		return erc20.BalanceCmd(cmd, args, txFabric)
+	},
+	Args: func(cmd *cobra.Command, args []string) error {
+		err := erc20.ValidateBalanceFlags(cmd, args)
+		if err != nil {
+			return err
+		}
+
+		erc20.ProcessBalanceFlags(cmd, args)
+		return nil
 	},
 }
 
