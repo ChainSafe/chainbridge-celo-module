@@ -2,7 +2,6 @@ package cli
 
 import (
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/deploy"
 	coreDeployCLI "github.com/ChainSafe/chainbridge-core/chains/evm/cli/deploy"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
 	"github.com/spf13/cobra"
@@ -27,5 +26,5 @@ var DeployCeloCmd = &cobra.Command{
 }
 
 func init() {
-	deploy.BindDeployEVMFlags(DeployCeloCmd)
+	coreDeployCLI.BindDeployEVMFlags(DeployCeloCmd)
 }
