@@ -20,7 +20,7 @@ func init() {
 	CeloRootCLI.AddCommand(DeployCeloCmd)
 
 	// // admin
-	// celoRootCLI.AddCommand(admin.AdminCmd)
+	CeloRootCLI.AddCommand(AdminCeloCmd)
 
 	// // bridge
 	CeloRootCLI.AddCommand(BridgeCeloCmd)
