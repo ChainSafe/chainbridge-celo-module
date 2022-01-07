@@ -58,9 +58,9 @@ var addMinterCmd = &cobra.Command{
 }
 
 var allowanceCmd = &cobra.Command{
-	Use:   "allowance",
-	Short: "Set a token contract as mintable/burnable",
-	Long:  "Set a token contract as mintable/burnable in a handler",
+	Use:   "get-allowance",
+	Short: "Get the allowance of a spender for an address",
+	Long:  "The get-allowance subcommand returns the allowance of a spender for an address",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		return util.CallPersistentPreRun(cmd, args)
 	},
