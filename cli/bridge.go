@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
+	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	bridgeContract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/evmtransaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/admin"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
@@ -40,7 +40,7 @@ var registerResourceCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
@@ -69,7 +69,7 @@ var setBurnCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}

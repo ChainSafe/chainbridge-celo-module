@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
+	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/evmtransaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/admin"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/initialize"
@@ -43,7 +43,7 @@ var pauseCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
@@ -73,7 +73,7 @@ var unpauseCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}

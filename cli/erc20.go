@@ -3,9 +3,9 @@ package cli
 import (
 	"fmt"
 
+	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
 	erc20Contract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/erc20"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/evmtransaction"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/admin"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/erc20"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
@@ -41,7 +41,7 @@ var addMinterCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
@@ -85,7 +85,7 @@ var approveCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
@@ -114,7 +114,7 @@ var depositCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
@@ -146,7 +146,7 @@ var mintCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, evmtransaction.NewTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
 		if err != nil {
 			return err
 		}
