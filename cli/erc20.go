@@ -1,9 +1,16 @@
 package cli
 
 import (
+	"fmt"
+
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
+	erc20Contract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/erc20"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/admin"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/erc20"
-	"github.com/ChainSafe/chainbridge-core/chains/evm/evmgaspricer"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/initialize"
+	"github.com/ChainSafe/chainbridge-core/util"
 	"github.com/spf13/cobra"
 )
 
@@ -11,15 +18,34 @@ var ERC20CeloCmd = &cobra.Command{
 	Use:   "erc20",
 	Short: "erc20-related instructions",
 	Long:  "erc20-related instructions",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		var err error
+		// fetch global flag values
+		url, gasLimit, gasPrice, senderKeyPair, err = flags.GlobalFlagValues(cmd)
+		if err != nil {
+			return fmt.Errorf("could not get global flags: %v", err)
+		}
+		return nil
+	},
 }
 
 var addMinterCmd = &cobra.Command{
 	Use:   "add-minter",
 	Short: "Add a minter to an Erc20 mintable contract",
 	Long:  "Add a minter to an Erc20 mintable contract",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		return util.CallPersistentPreRun(cmd, args)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.AddMinterCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		if err != nil {
+			return err
+		}
+		return erc20.AddMinterCmd(cmd, args, erc20Contract.NewERC20Contract(c, admin.BridgeAddr, t))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		err := erc20.ValidateAddMinterFlags(cmd, args)
@@ -32,12 +58,18 @@ var addMinterCmd = &cobra.Command{
 }
 
 var allowanceCmd = &cobra.Command{
-	Use:   "allowance",
-	Short: "Set a token contract as mintable/burnable",
-	Long:  "Set a token contract as mintable/burnable in a handler",
+	Use:   "get-allowance",
+	Short: "Get the allowance of a spender for an address",
+	Long:  "The get-allowance subcommand returns the allowance of a spender for an address",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		return util.CallPersistentPreRun(cmd, args)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.AllowanceCmd(cmd, args, txFabric)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		return erc20.GetAllowanceCmd(cmd, args, erc20Contract.NewERC20Contract(c, admin.BridgeAddr, nil))
 	},
 }
 
@@ -45,9 +77,19 @@ var approveCmd = &cobra.Command{
 	Use:   "approve",
 	Short: "Approve tokens in an ERC20 contract for transfer",
 	Long:  "Approve tokens in an ERC20 contract for transfer",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		return util.CallPersistentPreRun(cmd, args)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.ApproveCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		if err != nil {
+			return err
+		}
+		return erc20.ApproveCmd(cmd, args, erc20Contract.NewERC20Contract(c, admin.BridgeAddr, t))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		err := erc20.ValidateApproveFlags(cmd, args)
@@ -64,9 +106,19 @@ var depositCmd = &cobra.Command{
 	Use:   "deposit",
 	Short: "Initiate a transfer of ERC20 tokens",
 	Long:  "Initiate a transfer of ERC20 tokens",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		return util.CallPersistentPreRun(cmd, args)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.DepositCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		if err != nil {
+			return err
+		}
+		return erc20.DepositCmd(cmd, args, bridge.NewBridgeContract(c, admin.BridgeAddr, t))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		err := erc20.ValidateDepositFlags(cmd, args)
@@ -86,9 +138,19 @@ var mintCmd = &cobra.Command{
 	Use:   "mint",
 	Short: "Mint tokens on an ERC20 mintable contract",
 	Long:  "Mint tokens on an ERC20 mintable contract",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		return util.CallPersistentPreRun(cmd, args)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.MintCmd(cmd, args, txFabric, &evmgaspricer.StaticGasPriceDeterminant{})
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		if err != nil {
+			return err
+		}
+		return erc20.MintCmd(cmd, args, erc20Contract.NewERC20Contract(c, admin.BridgeAddr, t))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		err := erc20.ValidateMintFlags(cmd, args)
@@ -106,8 +168,11 @@ var balanceCmd = &cobra.Command{
 	Short: "Query balance of an account in an ERC20 contract",
 	Long:  "Query balance of an account in an ERC20 contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		txFabric := transaction.NewCeloTransaction
-		return erc20.BalanceCmd(cmd, args, txFabric)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
+		if err != nil {
+			return err
+		}
+		return erc20.BalanceCmd(cmd, args, erc20Contract.NewERC20Contract(c, admin.BridgeAddr, nil))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
 		err := erc20.ValidateBalanceFlags(cmd, args)
@@ -121,11 +186,11 @@ var balanceCmd = &cobra.Command{
 }
 
 func init() {
-	erc20.BindApproveCmdFlags(approveCmd)
-	erc20.BindDepositCmdFlags(depositCmd)
-	erc20.BindAddMinterCmdFlags(addMinterCmd)
-	erc20.BindAllowanceCmdFlags(allowanceCmd)
-	erc20.BindMintCmdFlags(mintCmd)
-	erc20.BindBalanceCmdFlags(balanceCmd)
+	erc20.BindApproveFlags(approveCmd)
+	erc20.BindDepositFlags(depositCmd)
+	erc20.BindAddMinterFlags(addMinterCmd)
+	erc20.BindGetAllowanceFlags(allowanceCmd)
+	erc20.BindMintFlags(mintCmd)
+	erc20.BindBalanceFlags(balanceCmd)
 	ERC20CeloCmd.AddCommand(approveCmd, depositCmd, addMinterCmd, allowanceCmd, mintCmd, balanceCmd)
 }
