@@ -1,25 +1,17 @@
 // Copyright 2021 ChainSafe Systems
 // SPDX-License-Identifier: LGPL-3.0-only
 
-package example
+package app
 
-import (
-	"fmt"
-	"github.com/ChainSafe/chainbridge-celo-module/transaction"
-	"os"
-	"os/signal"
-	"syscall"
+import "fmt"
 
-	"github.com/ChainSafe/chainbridge-core/chains/evm"
-	"github.com/ChainSafe/chainbridge-core/config"
-	"github.com/ChainSafe/chainbridge-core/flags"
-	"github.com/ChainSafe/chainbridge-core/lvldb"
-	"github.com/ChainSafe/chainbridge-core/opentelemetry"
-	"github.com/ChainSafe/chainbridge-core/relayer"
-	"github.com/rs/zerolog/log"
-	"github.com/spf13/viper"
-)
+func Run() error {
+	fmt.Println("celo")
 
+	return nil
+}
+
+/*
 func Run() error {
 	configuration, err := config.GetConfig(viper.GetString(flags.ConfigFlagName))
 	if err != nil {
@@ -74,3 +66,4 @@ func Run() error {
 		return nil
 	}
 }
+*/

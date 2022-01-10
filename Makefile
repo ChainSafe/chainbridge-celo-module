@@ -16,3 +16,6 @@ license-check:
 
 local-setup:
 	./scripts/local_setup.sh
+
+local:
+	go build -o chainbridge-celo-relayer e2e/celo-celo/example/main.go 
