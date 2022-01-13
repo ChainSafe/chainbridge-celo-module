@@ -6,15 +6,11 @@ ADD . /src
 WORKDIR /src
 RUN cd /src && echo $(ls -1 /src)
 RUN go mod download
-RUN go build -o /bridge .
+RUN go build -o /bridge e2e/celo-celo/example/main.go
 
 # # final stage
 FROM debian:stretch-slim
 RUN apt-get -y update && apt-get -y upgrade && apt-get install ca-certificates wget -y
-RUN wget -P /usr/local/bin/ https://chainbridge.ams3.digitaloceanspaces.com/subkey-rc6 \
-  && mv /usr/local/bin/subkey-rc6 /usr/local/bin/subkey \
-  && chmod +x /usr/local/bin/subkey
-RUN subkey --version
 
 COPY --from=builder /bridge ./
 RUN chmod +x ./bridge

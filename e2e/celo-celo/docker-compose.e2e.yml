@@ -1,4 +1,4 @@
-# Copyright 2020 ChainSafe Systems
+# Copyright 2022 ChainSafe Systems
 # SPDX-License-Identifier: LGPL-3.0-only
 version: '3'
 
@@ -24,8 +24,8 @@ services:
       - celo2
     container_name: celo2
     ports:
-      - "8645:8545"
-      - "8646:8546"
+      - "8647:8545"
+      - "8648:8546"
     depends_on:
       - celo1-1
     environment:
@@ -40,7 +40,7 @@ services:
     build:
       context: ../../.
       dockerfile: Dockerfile
-    command: run --config /cfg/config_evm-evm.json --testkey alice --fresh
+    command: run --config /cfg/config_celo-celo.json --testkey alice --fresh
     depends_on:
       - celo1-1
       - celo2-1
@@ -55,7 +55,7 @@ services:
     build:
       context: ../../.
       dockerfile: Dockerfile
-    command: run --config /cfg/config_evm-evm.json --testkey bob --fresh
+    command: run --config /cfg/config_celo-celo.json --testkey bob --fresh
     depends_on:
       - celo1-1
       - celo2-1
@@ -70,7 +70,7 @@ services:
     build:
       context: ../../.
       dockerfile: Dockerfile
-    command: run --config /cfg/config_evm-evm.json --testkey charlie --fresh
+    command: run --config /cfg/config_celo-celo.json --testkey charlie --fresh
     depends_on:
       - celo1-1
       - celo2-1
@@ -81,5 +81,5 @@ services:
       - ./example/cfg:/cfg
 
 networks:
-  celo2:
-  celo1:
+  celo2: null
+  celo1: null
