@@ -36,7 +36,7 @@ services:
       - VALIDATOR=0xff93B45308FD417dF303D6515aB04D9e89a750Ca
 
   relayer1:
-    container_name: relayer1
+    container_name: celoRelayer1
     build:
       context: ../../.
       dockerfile: Dockerfile
@@ -51,7 +51,7 @@ services:
       - ./example/cfg:/cfg
 
   relayer2:
-    container_name: relayer2
+    container_name: celoRelayer2
     build:
       context: ../../.
       dockerfile: Dockerfile
@@ -66,7 +66,7 @@ services:
       - ./example/cfg:/cfg
 
   relayer3:
-    container_name: relayer3
+    container_name: celoRelayer3
     build:
       context: ../../.
       dockerfile: Dockerfile

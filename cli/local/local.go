@@ -20,21 +20,21 @@ var LocalSetupCmd = &cobra.Command{
 
 // configuration
 var (
-	ethEndpoint1 = "http://localhost:8545"
-	ethEndpoint2 = "http://localhost:8547"
-	fabric1      = transaction.NewCeloTransaction
-	fabric2      = transaction.NewCeloTransaction
+	celoEndpoint1 = "http://localhost:8545"
+	celoEndpoint2 = "http://localhost:8547"
+	fabric1       = transaction.NewCeloTransaction
+	fabric2       = transaction.NewCeloTransaction
 )
 
 func LocalSetupCLI(cmd *cobra.Command, args []string) error {
 	// init client1
-	ethClient, err := evmclient.NewEVMClientFromParams(ethEndpoint1, local.EveKp.PrivateKey())
+	ethClient, err := evmclient.NewEVMClientFromParams(celoEndpoint1, local.EveKp.PrivateKey())
 	if err != nil {
 		return err
 	}
 
 	// init client2
-	ethClient2, err := evmclient.NewEVMClientFromParams(ethEndpoint2, local.EveKp.PrivateKey())
+	ethClient2, err := evmclient.NewEVMClientFromParams(celoEndpoint2, local.EveKp.PrivateKey())
 	if err != nil {
 		return err
 	}

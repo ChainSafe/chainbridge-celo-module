@@ -10,8 +10,6 @@ RUN go build -o /bridge e2e/celo-celo/example/main.go
 
 # # final stage
 FROM debian:stretch-slim
-RUN apt-get -y update && apt-get -y upgrade && apt-get install ca-certificates wget -y
-
 COPY --from=builder /bridge ./
 RUN chmod +x ./bridge
 
