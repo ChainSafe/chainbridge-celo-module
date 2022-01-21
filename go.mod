@@ -3,7 +3,7 @@ module github.com/ChainSafe/chainbridge-celo-module
 go 1.15
 
 require (
-	github.com/ChainSafe/chainbridge-core v0.0.0-20220107093555-abe81620e6a2
+	github.com/ChainSafe/chainbridge-core v0.0.0-20220120162654-c03a4d159125
 	github.com/StackExchange/wmi v1.2.1 // indirect
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/deckarep/golang-set v1.7.1 // indirect

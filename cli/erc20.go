@@ -21,7 +21,7 @@ var ERC20CeloCmd = &cobra.Command{
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		// fetch global flag values
-		url, gasLimit, gasPrice, senderKeyPair, err = flags.GlobalFlagValues(cmd)
+		url, gasLimit, gasPrice, senderKeyPair, prepare, err = flags.GlobalFlagValues(cmd)
 		if err != nil {
 			return fmt.Errorf("could not get global flags: %v", err)
 		}
@@ -41,7 +41,7 @@ var addMinterCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -85,7 +85,7 @@ var approveCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -114,7 +114,7 @@ var depositCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -146,7 +146,7 @@ var mintCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}

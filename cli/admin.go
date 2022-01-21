@@ -20,7 +20,7 @@ var AdminCeloCmd = &cobra.Command{
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 		var err error
 		// fetch global flag values
-		url, gasLimit, gasPrice, senderKeyPair, err = flags.GlobalFlagValues(cmd)
+		url, gasLimit, gasPrice, senderKeyPair, prepare, err = flags.GlobalFlagValues(cmd)
 		if err != nil {
 			return fmt.Errorf("could not get global flags: %v", err)
 		}
@@ -43,7 +43,7 @@ var pauseCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -73,7 +73,7 @@ var unpauseCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
