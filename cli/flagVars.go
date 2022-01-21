@@ -11,5 +11,6 @@ var (
 	url           string
 	gasLimit      uint64
 	gasPrice      *big.Int
+	prepare       bool
 	senderKeyPair *secp256k1.Keypair
 )
