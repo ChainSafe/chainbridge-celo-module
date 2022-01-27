@@ -20,7 +20,7 @@ func TestRunE2ETests(t *testing.T) {
 		panic(err)
 	}
 
-	celo2, err := evmclient.NewEVMClientFromParams(ETHEndpoint1, local.EveKp.PrivateKey())
+	celo2, err := evmclient.NewEVMClientFromParams(ETHEndpoint2, local.EveKp.PrivateKey())
 	if err != nil {
 		panic(err)
 	}

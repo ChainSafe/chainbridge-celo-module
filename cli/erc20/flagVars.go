@@ -37,9 +37,7 @@ var (
 
 // global flags
 var (
-	dstAddress    common.Address
 	url           string
-	gasLimit      uint64
 	gasPrice      *big.Int
 	senderKeyPair *secp256k1.Keypair
 	prepare       bool

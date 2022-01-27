@@ -289,7 +289,7 @@ func (tx *CeloTransaction) Size() common.StorageSize {
 		return size.(common.StorageSize)
 	}
 	c := writeCounter(0)
-	rlp.Encode(&c, &tx.data)
+	_ = rlp.Encode(&c, &tx.data)
 	tx.size.Store(common.StorageSize(c))
 	return common.StorageSize(c)
 }
@@ -567,7 +567,7 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 
 func rlpHash(x interface{}) (h common.Hash) {
 	hw := sha3.NewLegacyKeccak256()
-	rlp.Encode(hw, x)
+	_ = rlp.Encode(hw, x)
 	hw.Sum(h[:0])
 	return h
 }
