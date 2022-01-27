@@ -48,7 +48,7 @@ services:
       - celo1
       - celo2
     volumes:
-      - ./example/cfg:/cfg
+      - ./e2e/celo-celo/example/cfg:/cfg
 
   relayer2:
     container_name: celoRelayer2
@@ -63,7 +63,7 @@ services:
       - celo1
       - celo2
     volumes:
-      - ./example/cfg:/cfg
+      - ./e2e/celo-celo/example/cfg:/cfg
 
   relayer3:
     container_name: celoRelayer3
@@ -78,7 +78,7 @@ services:
       - celo1
       - celo2
     volumes:
-      - ./example/cfg:/cfg
+      - ./e2e/celo-celo/example/cfg:/cfg
 
 networks:
   celo2: null
