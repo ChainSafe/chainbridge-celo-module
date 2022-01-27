@@ -14,8 +14,14 @@ license-check:
 	GO111MODULE=off go get -u github.com/google/addlicense
 	addlicense -check -c "ChainSafe Systems" -f ./scripts/header.txt -y 2021 .
 
+local:
+	go build -o chainbridge-celo-relayer e2e/celo-celo/example/main.go
+
+e2e-setup:
+	docker-compose --file=./e2e/celo-celo/docker-compose.e2e.yml up
+
+e2e-test:
+	./scripts/int_tests.sh
+
 local-setup:
 	./scripts/local_setup.sh
-
-local:
-	go build -o chainbridge-celo-relayer e2e/celo-celo/example/main.go 
