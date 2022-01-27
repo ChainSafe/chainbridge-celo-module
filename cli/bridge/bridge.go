@@ -1,10 +1,13 @@
 package bridge
 
 import (
+	"fmt"
+
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 
 	bridgeContract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/bridge"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/initialize"
 	"github.com/spf13/cobra"
 )
@@ -13,6 +16,15 @@ var BridgeCeloCmd = &cobra.Command{
 	Use:   "bridge",
 	Short: "Set of commands for interacting with a bridge",
 	Long:  "Set of commands for interacting with a bridge",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		var err error
+		// fetch global flag values
+		url, gasLimit, gasPrice, senderKeyPair, prepare, err = flags.GlobalFlagValues(cmd)
+		if err != nil {
+			return fmt.Errorf("could not get global flags: %v", err)
+		}
+		return nil
+	},
 }
 
 var registerResourceCmd = &cobra.Command{
@@ -27,11 +39,7 @@ var registerResourceCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(
-			gasPrice,
-			transaction.NewCeloTransaction,
-			client,
-		)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -42,7 +50,7 @@ var registerResourceCmd = &cobra.Command{
 			bridgeContract.NewBridgeContract(
 				client,
 				BridgeAddr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -68,11 +76,7 @@ var setBurnCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(
-			gasPrice,
-			transaction.NewCeloTransaction,
-			client,
-		)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -83,7 +87,7 @@ var setBurnCmd = &cobra.Command{
 			bridgeContract.NewBridgeContract(
 				client,
 				BridgeAddr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
