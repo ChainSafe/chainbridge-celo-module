@@ -35,7 +35,7 @@ var pauseCmd = &cobra.Command{
 		logger.LoggerMetadata(cmd.Name(), cmd.Flags())
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(
+		c, err := initialize.InitializeClient(
 			url,
 			senderKeyPair,
 		)
@@ -50,7 +50,7 @@ var pauseCmd = &cobra.Command{
 			cmd,
 			args,
 			bridgeContract.NewBridgeContract(
-				client,
+				c,
 				BridgeAddr,
 				t,
 			))
@@ -75,7 +75,7 @@ var unpauseCmd = &cobra.Command{
 		logger.LoggerMetadata(cmd.Name(), cmd.Flags())
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(
+		c, err := initialize.InitializeClient(
 			url,
 			senderKeyPair,
 		)
@@ -90,7 +90,7 @@ var unpauseCmd = &cobra.Command{
 			cmd,
 			args,
 			bridgeContract.NewBridgeContract(
-				client,
+				c,
 				BridgeAddr,
 				t,
 			))

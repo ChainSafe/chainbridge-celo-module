@@ -1,10 +1,13 @@
 package erc20
 
 import (
+	"fmt"
+
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
 	bridgeContract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
 	erc20Contract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/erc20"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/erc20"
+	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/initialize"
 	"github.com/spf13/cobra"
 )
@@ -13,6 +16,15 @@ var ERC20CeloCmd = &cobra.Command{
 	Use:   "erc20",
 	Short: "Set of commands for interacting with an ERC20 contract",
 	Long:  "Set of commands for interacting with an ERC20 contract",
+	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		var err error
+		// fetch global flag values
+		url, gasLimit, gasPrice, senderKeyPair, prepare, err = flags.GlobalFlagValues(cmd)
+		if err != nil {
+			return fmt.Errorf("could not get global flags: %v", err)
+		}
+		return nil
+	},
 }
 
 var addMinterCmd = &cobra.Command{
@@ -20,11 +32,11 @@ var addMinterCmd = &cobra.Command{
 	Short: "Add a new ERC20 minter",
 	Long:  "The add-minter subcommand adds a minter to an ERC20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -32,9 +44,9 @@ var addMinterCmd = &cobra.Command{
 			cmd,
 			args,
 			erc20Contract.NewERC20Contract(
-				client,
+				c,
 				Erc20Addr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -52,11 +64,11 @@ var allowanceCmd = &cobra.Command{
 	Short: "Get the allowance of a spender for an address",
 	Long:  "The get-allowance subcommand returns the allowance of a spender for an address",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -64,9 +76,9 @@ var allowanceCmd = &cobra.Command{
 			cmd,
 			args,
 			erc20Contract.NewERC20Contract(
-				client,
+				c,
 				Erc20Addr,
-				transactor,
+				t,
 			))
 	},
 }
@@ -76,11 +88,11 @@ var approveCmd = &cobra.Command{
 	Short: "Approve an ERC20 tokens",
 	Long:  "The approve subcommand approves tokens in an ERC20 contract for transfer",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -88,9 +100,9 @@ var approveCmd = &cobra.Command{
 			cmd,
 			args,
 			erc20Contract.NewERC20Contract(
-				client,
+				c,
 				Erc20Addr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -109,11 +121,11 @@ var depositCmd = &cobra.Command{
 	Short: "Deposit an ERC20 token",
 	Long:  "The deposit subcommand creates a new ERC20 token deposit on the bridge contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -121,9 +133,9 @@ var depositCmd = &cobra.Command{
 			cmd,
 			args,
 			bridgeContract.NewBridgeContract(
-				client,
+				c,
 				BridgeAddr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -145,11 +157,11 @@ var mintCmd = &cobra.Command{
 	Short: "Mint an ERC20 token",
 	Long:  "The mint subcommand mints a token on an ERC20 mintable contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -157,9 +169,9 @@ var mintCmd = &cobra.Command{
 			cmd,
 			args,
 			erc20Contract.NewERC20Contract(
-				client,
+				c,
 				Erc20Addr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {
@@ -178,11 +190,11 @@ var balanceCmd = &cobra.Command{
 	Short: "Query an ERC20 token balance",
 	Long:  "The balance subcommand queries the balance of an account in an ERC20 contract",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(url, senderKeyPair)
+		c, err := initialize.InitializeClient(url, senderKeyPair)
 		if err != nil {
 			return err
 		}
-		transactor, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, client)
+		t, err := initialize.InitializeTransactor(gasPrice, transaction.NewCeloTransaction, c, prepare)
 		if err != nil {
 			return err
 		}
@@ -190,9 +202,9 @@ var balanceCmd = &cobra.Command{
 			cmd,
 			args,
 			erc20Contract.NewERC20Contract(
-				client,
+				c,
 				Erc20Addr,
-				transactor,
+				t,
 			))
 	},
 	Args: func(cmd *cobra.Command, args []string) error {

@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
-
 	bridgeContract "github.com/ChainSafe/chainbridge-core/chains/evm/calls/contracts/bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/bridge"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/flags"
 	"github.com/ChainSafe/chainbridge-core/chains/evm/cli/initialize"
+
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,7 @@ var registerResourceCmd = &cobra.Command{
 	Short: "Register a resource ID",
 	Long:  "The register-resource subcommand registers a resource ID with a contract address for a handler",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(
+		c, err := initialize.InitializeClient(
 			url,
 			senderKeyPair,
 		)
@@ -48,7 +48,7 @@ var registerResourceCmd = &cobra.Command{
 			cmd,
 			args,
 			bridgeContract.NewBridgeContract(
-				client,
+				c,
 				BridgeAddr,
 				t,
 			))
@@ -69,7 +69,7 @@ var setBurnCmd = &cobra.Command{
 	Short: "Set a token contract as mintable/burnable",
 	Long:  "The set-burn subcommand sets a token contract as mintable/burnable in a handler",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		client, err := initialize.InitializeClient(
+		c, err := initialize.InitializeClient(
 			url,
 			senderKeyPair,
 		)
@@ -85,7 +85,7 @@ var setBurnCmd = &cobra.Command{
 			cmd,
 			args,
 			bridgeContract.NewBridgeContract(
-				client,
+				c,
 				BridgeAddr,
 				t,
 			))

@@ -3,20 +3,18 @@ module github.com/ChainSafe/chainbridge-celo-module
 go 1.17
 
 require (
-	github.com/ChainSafe/chainbridge-core v0.0.0-20220110124723-abb0bf918502
-	github.com/centrifuge/go-substrate-rpc-client v2.0.0+incompatible
+	github.com/ChainSafe/chainbridge-core v0.0.0-20220120162654-c03a4d159125
 	github.com/ethereum/go-ethereum v1.10.15
 	github.com/rs/zerolog v1.26.1
 	github.com/spf13/cobra v1.3.0
 	github.com/spf13/viper v1.10.1
-	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20211215165025-cf75a172585e
 )
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20180116203802-5d049714c4a6 // indirect
 	github.com/btcsuite/btcd v0.20.1-beta // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/centrifuge/go-substrate-rpc-client v2.0.0+incompatible // indirect
 	github.com/deckarep/golang-set v0.0.0-20180603214616-504e848d77ea // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-ole/go-ole v1.2.1 // indirect
@@ -37,7 +35,6 @@ require (
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/pierrec/xxHash v0.1.5 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rjeczalik/notify v0.9.1 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
 	github.com/spf13/afero v1.6.0 // indirect
@@ -69,5 +66,4 @@ require (
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

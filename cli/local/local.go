@@ -41,14 +41,28 @@ func LocalSetupCLI(cmd *cobra.Command, args []string) error {
 
 	// chain 1
 	// domainsId: 0
-	config, err := local.PrepareLocalEVME2EEnv(ethClient, fabric1, 1, big.NewInt(1), local.EveKp.CommonAddress())
+	config, err := local.PrepareLocalEVME2EEnv(
+		ethClient,
+		fabric1,
+		1,
+		big.NewInt(1),
+		local.EveKp.CommonAddress(),
+		local.DefaultRelayerAddresses,
+	)
 	if err != nil {
 		return err
 	}
 
 	// chain 2
 	// domainId: 1
-	config2, err := local.PrepareLocalEVME2EEnv(ethClient2, fabric2, 2, big.NewInt(1), local.EveKp.CommonAddress())
+	config2, err := local.PrepareLocalEVME2EEnv(
+		ethClient2,
+		fabric2,
+		2,
+		big.NewInt(1),
+		local.EveKp.CommonAddress(),
+		local.DefaultRelayerAddresses,
+	)
 	if err != nil {
 		return err
 	}
@@ -63,7 +77,7 @@ func prettyPrint(config, config2 local.EVME2EConfig) {
 ===============================================
 🎉🎉🎉 ChainBridge Successfully Deployed 🎉🎉🎉
 
-- Chain 1 - 
+- Chain 1 -
 Bridge: %s
 ERC20: %s
 ERC20 Handler: %s
