@@ -4,8 +4,9 @@ import (
 	"crypto/ecdsa"
 	"errors"
 	"fmt"
-	"github.com/ethereum/go-ethereum/params"
 	"math/big"
+
+	"github.com/ethereum/go-ethereum/params"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
@@ -28,7 +29,6 @@ type CeloSigner interface {
 	// Equal returns true if the given signer is the same as the receiver.
 	Equal(CeloSigner) bool
 }
-
 
 // sigCache is used to cache the derived sender and contains
 // the signer used to derive it.
