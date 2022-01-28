@@ -5,8 +5,6 @@ version: '3'
 services:
   celo1-1:
     image: "chainsafe/chainbridge-celo-blockchain:0.1.4"
-    networks:
-      - celo1
     container_name: celo1
     ports:
       - "8545:8545"
@@ -20,8 +18,6 @@ services:
   # SECOND CHAIN
   celo2-1:
     image: "chainsafe/chainbridge-celo-blockchain:0.1.4"
-    networks:
-      - celo2
     container_name: celo2
     ports:
       - "8647:8545"
@@ -29,11 +25,10 @@ services:
     depends_on:
       - celo1-1
     environment:
-      - ACCOUNTS=0xff93B45308FD417dF303D6515aB04D9e89a750Ca
-      - BOOTNODE=enode://47eccabfa6fa81f7ae7d8c094485fd521789e22e529916a2409970b6e99b1d1b6c590ad71bd08f182071313b2e03d319f4f6b625b28b6ab7768bb2de3f2a6eed@celo1:30303
-      - DATADIR=celo-dump2
+      - NODEKEY=98ab333347a12cef869f92b3de44085f9e44891e513bcf1d76a99eecbcdd5e17
+      - DATADIR=celo-dump1
       - NETWORKID=333
-      - VALIDATOR=0xff93B45308FD417dF303D6515aB04D9e89a750Ca
+      - VALIDATOR=0xf4314cb9046bece6aa54bb9533155434d0c76909
 
   relayer1:
     container_name: celoRelayer1
@@ -44,9 +39,6 @@ services:
     depends_on:
       - celo1-1
       - celo2-1
-    networks:
-      - celo1
-      - celo2
     volumes:
       - ./example/cfg:/cfg
 
@@ -59,9 +51,6 @@ services:
     depends_on:
       - celo1-1
       - celo2-1
-    networks:
-      - celo1
-      - celo2
     volumes:
       - ./example/cfg:/cfg
 
@@ -74,12 +63,5 @@ services:
     depends_on:
       - celo1-1
       - celo2-1
-    networks:
-      - celo1
-      - celo2
     volumes:
       - ./example/cfg:/cfg
-
-networks:
-  celo2: null
-  celo1: null
