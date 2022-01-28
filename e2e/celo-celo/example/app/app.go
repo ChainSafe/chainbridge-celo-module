@@ -9,8 +9,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	celo "github.com/ChainSafe/chainbridge-celo-module"
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"
-	"github.com/ChainSafe/chainbridge-core/chains/evm"
 	"github.com/ChainSafe/chainbridge-core/config"
 	"github.com/ChainSafe/chainbridge-core/flags"
 	"github.com/ChainSafe/chainbridge-core/lvldb"
@@ -38,7 +38,7 @@ func Run() error {
 		switch chainConfig["type"] {
 		case "celo":
 			{
-				chain, err := evm.SetupDefaultEVMChain(chainConfig, transaction.NewCeloTransaction, blockstore)
+				chain, err := celo.SetupDefaultCeloChain(chainConfig, transaction.NewCeloTransaction, blockstore)
 				if err != nil {
 					panic(err)
 				}
