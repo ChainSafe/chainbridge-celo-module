@@ -1,0 +1,67 @@
+# Copyright 2022 ChainSafe Systems
+# SPDX-License-Identifier: LGPL-3.0-only
+version: '3'
+
+services:
+  celo1-1:
+    image: "chainsafe/chainbridge-celo-blockchain:0.1.4"
+    container_name: celo1
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    environment:
+      - NODEKEY=98ab333347a12cef869f92b3de44085f9e44891e513bcf1d76a99eecbcdd5e17
+      - DATADIR=celo-dump1
+      - NETWORKID=333
+      - VALIDATOR=0xf4314cb9046bece6aa54bb9533155434d0c76909
+
+  # SECOND CHAIN
+  celo2-1:
+    image: "chainsafe/chainbridge-celo-blockchain:0.1.4"
+    container_name: celo2
+    ports:
+      - "8647:8545"
+      - "8648:8546"
+    depends_on:
+      - celo1-1
+    environment:
+      - NODEKEY=98ab333347a12cef869f92b3de44085f9e44891e513bcf1d76a99eecbcdd5e17
+      - DATADIR=celo-dump1
+      - NETWORKID=333
+      - VALIDATOR=0xf4314cb9046bece6aa54bb9533155434d0c76909
+
+  relayer1:
+    container_name: celoRelayer1
+    build:
+      context: ../../.
+      dockerfile: Dockerfile
+    command: run --config /cfg/config_celo-celo.json --testkey alice --fresh
+    depends_on:
+      - celo1-1
+      - celo2-1
+    volumes:
+      - ./example/cfg:/cfg
+
+  relayer2:
+    container_name: celoRelayer2
+    build:
+      context: ../../.
+      dockerfile: Dockerfile
+    command: run --config /cfg/config_celo-celo.json --testkey bob --fresh
+    depends_on:
+      - celo1-1
+      - celo2-1
+    volumes:
+      - ./example/cfg:/cfg
+
+  relayer3:
+    container_name: celoRelayer3
+    build:
+      context: ../../.
+      dockerfile: Dockerfile
+    command: run --config /cfg/config_celo-celo.json --testkey charlie --fresh
+    depends_on:
+      - celo1-1
+      - celo2-1
+    volumes:
+      - ./example/cfg:/cfg

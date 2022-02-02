@@ -1,4 +1,4 @@
-package cli
+package deploy
 
 import (
 	"github.com/ChainSafe/chainbridge-celo-module/transaction"

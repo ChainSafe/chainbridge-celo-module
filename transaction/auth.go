@@ -4,13 +4,14 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"errors"
+	"io"
+	"io/ioutil"
+	"math/big"
+
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
-	"io"
-	"io/ioutil"
-	"math/big"
 )
 
 // NewTransactor is a utility method to easily create a transaction signer from
@@ -63,7 +64,6 @@ func NewKeyedTransactor(key *ecdsa.PrivateKey) *TransactOpts {
 		},
 	}
 }
-
 
 // TransactOpts is the collection of authorization data required to create a
 // valid Ethereum transaction.
