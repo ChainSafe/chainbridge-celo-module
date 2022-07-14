@@ -1,9 +1,9 @@
-# Chainbridge celo module
+# Sygma celo module
 <a href="https://discord.gg/ykXsJKfhgq">
   <img alt="discord" src="https://img.shields.io/discord/593655374469660673?label=Discord&logo=discord&style=flat" />
 </a>
 
-Chainbridge celo module is the part of Chainbrige-core framework. This module brings support of celo compatible client module.
+Sygma celo module is the part of Sygma-core framework. This module brings support of celo compatible client module.
 
 *Project still in deep beta*
 - Chat with us on [discord](https://discord.gg/ykXsJKfhgq).
